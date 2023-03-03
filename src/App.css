@@ -1,3 +1,7 @@
+body {
+  background-color: whitesmoke;
+}
+
 .App {
   text-align: center;
 }
@@ -24,15 +28,19 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.menu {
+  background-color: orange;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 5vw;
+
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.menu-content {
+  display: flex;
+  justify-content: space-evenly;
+  margin: 3vw;
 }

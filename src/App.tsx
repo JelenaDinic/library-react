@@ -1,24 +1,30 @@
-import logo from './logo.svg'
+/* eslint-disable import/order */
+import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom'
+
 import './App.css'
+
+import { CgProfile } from 'react-icons/cg'
+import { GiBookshelf } from 'react-icons/gi'
+
+import routes from './route-config'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className='container'>
+        <Routes>
+          {routes.map(route =>
+            <Route key={route.path} path={route.path} element={<route.component />} />
+          )}
+        </Routes>
+      </div>
+      <div className='menu'>
+        <div className='menu-content'>
+          <NavLink to="/Login" ><CgProfile /></NavLink>
+          <NavLink to="/Profile" ><GiBookshelf /></NavLink>
+        </div>
+      </div>
+    </BrowserRouter>
   )
 }
 
