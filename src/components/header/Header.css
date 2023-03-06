@@ -1,0 +1,26 @@
+.header {
+    display: flex;
+    justify-content: center;
+    margin-top: 3px;
+    border-bottom: 1px solid orange;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+}
+
+input {
+    font-size: larger;
+}
+
+input:focus {
+    outline: none;
+    border:1px solid orange;
+}
+
+.header-content > * {
+    padding-left: 3px;
+}

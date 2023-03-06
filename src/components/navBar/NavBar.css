@@ -1,0 +1,23 @@
+.navbar {
+    display: none;
+}
+
+@media (min-width: 750px) {
+    .navbar { 
+        display: block;
+        background-color: #FFB318;
+        position: fixed;
+        height: 100%;
+        top: 0;
+      }
+      
+      .navbar-content {
+        display: flex;
+        flex-direction: column;
+        margin: 3vw;
+      }
+
+      .icon {
+        padding-block: 40%;
+      }
+}
