@@ -8,16 +8,18 @@
         background-color: #e58f23;
         position: fixed;
         height: 100%;
+        width: 180px;
+        left: 0;
         top: 0;
       }
       
       .navbar-content {
         display: flex;
         flex-direction: column;
-        margin: 3vw;
+        margin: 2vw;
       }
 
       .icon {
-        padding-block: 40%;
+        padding-block: 30%;
       }
 }

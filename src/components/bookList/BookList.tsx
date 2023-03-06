@@ -8,6 +8,9 @@ function BookList() {
       <BookCard/>
       <BookCard/>
       <BookCard/>
+      <BookCard/>
+      <BookCard/>
+      <BookCard/>
     </div>
   )
 }
