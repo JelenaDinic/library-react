@@ -1,5 +1,5 @@
 body {
-  background-color: lightyellow;
+  background-color: #2c2b3d;
 }
 
 .App {
@@ -23,7 +23,7 @@ body {
 }
 
 .menu {
-  background-color: #FFB318;
+  background-color: #e58f23;
   position: fixed;
   width: 100%;
   bottom: 0;

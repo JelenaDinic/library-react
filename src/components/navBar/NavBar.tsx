@@ -9,9 +9,9 @@ function NavBar() {
   return (
     <div className='navbar'>
       <div className='navbar-content'>
-        <NavLink className = "icon" to="/Home" ><ImHome size={50} color="white" /></NavLink>
-        <NavLink className = "icon" to="/Login" ><CgProfile size={50} color="white" /></NavLink>
-        <NavLink className = "icon" to="/Books" ><GiBookshelf size={50} color="white" /></NavLink>
+        <NavLink className = "icon" to="/Home" ><ImHome size={50} color="#fce4db" /></NavLink>
+        <NavLink className = "icon" to="/Login" ><CgProfile size={50} color="#fce4db" /></NavLink>
+        <NavLink className = "icon" to="/Books" ><GiBookshelf size={50} color="#fce4db" /></NavLink>
       </div>
     </div>
   )

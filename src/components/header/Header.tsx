@@ -6,9 +6,9 @@ function Header() {
   return (
     <div className='header'>
       <div className='header-content'>
-        <input placeholder="Search books..."/> <BiSearchAlt color='orange' size={30}/>
-        <BiFilterAlt color='orange' size={30}/>
-        <AiOutlineSortDescending color='orange' size={30}/>
+        <input placeholder="Search books..."/> <BiSearchAlt color='#fce4db' size={30}/>
+        <BiFilterAlt color='#fce4db' size={30}/>
+        <AiOutlineSortDescending color='#fce4db' size={30}/>
       </div>
     </div>
   )

@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     margin-top: 3px;
-    border-bottom: 1px solid orange;
+    border-bottom: 1px solid #fce4db;
 }
 
 .header-content {
@@ -18,7 +18,7 @@ input {
 
 input:focus {
     outline: none;
-    border:1px solid orange;
+    border:1px solid #e58f23;
 }
 
 .header-content > * {
