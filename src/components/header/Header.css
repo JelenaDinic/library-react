@@ -1,0 +1,29 @@
+.header {
+    display: flex;
+    justify-content: center;
+    margin-top: 3px;
+    border-bottom: 1px solid #fce4db;
+    width: 100%;
+    position: fixed;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+}
+
+.search {
+    font-size: larger;
+    background-color: #fce4db;
+}
+
+input:focus {
+    outline: none;
+    border:1px solid #e58f23;
+}
+
+.header-content > * {
+    padding-left: 3px;
+}

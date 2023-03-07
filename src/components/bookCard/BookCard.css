@@ -1,0 +1,15 @@
+.card {
+    border: 1px solid #fce4db;
+    width: 300px;
+    height: 450px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    color: #fce4db;
+}
+
+@media (min-width: 750px) {
+    .card {
+        margin-left: 100px;
+    }
+}
