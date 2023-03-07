@@ -3,7 +3,7 @@ import './BookList.css'
 
 function BookList() {
   return (
-    <div className='bookList'>
+    <div className='book-list'>
       <BookCard/>
       <BookCard/>
       <BookCard/>

@@ -14,8 +14,9 @@
     padding: 10px;
 }
 
-input {
+.search {
     font-size: larger;
+    background-color: #fce4db;
 }
 
 input:focus {

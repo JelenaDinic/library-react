@@ -1,17 +1,30 @@
 button {
-    background-color: orange;
+    background-color: #e58f23;
     border: none;
-    color: white;
-    padding: 15px 32px;
+    color: #fce4db;
+    padding: 15px 35px;
     text-align: center;
     text-decoration: none;
     margin-top: 10px;
     width: max-content;
+    font-size: large;
   }
 
-.container {
+.form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 5vw;
+    margin-top: 20vw;    
+}
+
+label {
+  color: #fce4db;
+  margin: 2vw;
+  font-size: larger;
+}
+
+.login-input {
+  width: 80%;
+  background-color: #fce4db;
+  font-size: larger;
 }

@@ -2,11 +2,9 @@ import './BookCard.css'
 
 function BookCard() {
   return (
-    <>
-      <div className="card">
+    <div className="card">
         BOOK CARD
-      </div>
-    </>
+    </div>
   )
 }
 export default BookCard

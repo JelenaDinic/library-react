@@ -8,7 +8,7 @@
         background-color: #e58f23;
         position: fixed;
         height: 100%;
-        width: 180px;
+        width: 150px;
         left: 0;
         top: 0;
       }
@@ -18,7 +18,7 @@
         flex-direction: column;
         margin: 2vw;
       }
-
+      
       .icon {
         padding-block: 30%;
       }
