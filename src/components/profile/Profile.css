@@ -1,0 +1,19 @@
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50vw;    
+}
+
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    font-size: large;
+    color: antiquewhite;
+}
+
+@media (min-width: 750px) {
+    .profile {
+      margin-top: 15vw;    
+  }
+  }

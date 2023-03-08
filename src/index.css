@@ -17,3 +17,26 @@ code {
 *::after {
   box-sizing: border-box;
 }
+
+button {
+  background-color: #e58f23;
+  border: none;
+  display: flex;
+  justify-content: center;
+  color: #fce4db;
+  padding: 10px 15px;
+  margin: 10px;
+  font-size: large;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #ee9911;
+}
+
+@media (min-width: 750px) {
+  button {
+    width: 100px;
+  }
+}

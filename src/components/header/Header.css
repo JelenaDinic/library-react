@@ -11,19 +11,47 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 10px;
+    padding: 15px;
 }
 
 .search {
     font-size: larger;
-    background-color: #fce4db;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #e58f23;
+    margin-right: 10px;
 }
 
-input:focus {
+.header-icon {
+    margin-right: 10px;
+}
+
+.search:focus {
     outline: none;
-    border:1px solid #e58f23;
+    border-bottom: 1px solid #fce4db;
 }
 
 .header-content > * {
     padding-left: 3px;
 }
+
+.sign-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.sign-buttons button[name*=sign-in] {
+    background-color: transparent;
+    border: 1px solid #e58f23;
+}
+.sign-buttons button[name*=sign-in]:hover {
+    background-color: #e58f23;
+}
+
+@media (min-width: 750px) {
+    .header {
+        justify-content: flex-end;
+    }
+}
+

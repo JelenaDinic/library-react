@@ -1,17 +1,24 @@
 import './Menu.css'
 
+import { BiLogOut as LogoutIcon } from 'react-icons/bi'
 import { BsThreeDots as MoreIcon } from 'react-icons/bs'
 import { CgProfile as ProfileIcon } from 'react-icons/cg'
 import { GiBookshelf as BooksIcon } from 'react-icons/gi'
 import { NavLink } from 'react-router-dom'
 
-function Menu() {
+function Menu(props: { setIsLogged : React.Dispatch<React.SetStateAction<boolean>>, isLogged : boolean }) {
+
+  const logout = () => {
+    localStorage.removeItem('token')
+    props.setIsLogged(false)
+  }
   return (
     <div className='menu'>
       <div className='menu-content'>
-        <NavLink to="/Login" ><ProfileIcon size={25} color="white"/></NavLink>
-        <NavLink to="/Books" ><BooksIcon size={25} color="white"/></NavLink>
-        <MoreIcon size={25} color="white"/>
+        <NavLink to="/Profile" ><ProfileIcon size={25} color="#fce4db"/></NavLink>
+        <NavLink to="/Books" ><BooksIcon size={25} color="#fce4db"/></NavLink>
+        {props.isLogged && <NavLink onClick={() => { logout() } } to='/Login' ><LogoutIcon size={25} color="#fce4db" /></NavLink>}
+        <MoreIcon size={25} color="#fce4db"/>
       </div>
     </div>
   )
