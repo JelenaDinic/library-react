@@ -1,15 +1,55 @@
+import { FormEvent, useState } from 'react'
+
+import axios, { AxiosError } from 'axios'
+import { useNavigate } from 'react-router-dom'
+
+import LoginCredentials from '../../interfaces/LoginCredentials'
+import { getLogin } from '../../services/auth.service'
+import { setToken } from '../../services/token.service'
+
 import './Login.css'
 
-function Login() {
+function Login(props: { setIsLogged : React.Dispatch<React.SetStateAction<boolean>> }) {
+  const [ user, setUser ] = useState({ email: '', password: '' })
+  const [ errorMessage, setErrorMessage ] = useState ('')
+  const navigate = useNavigate()
+
+  const handleSubmit = (e : FormEvent) => {
+    e.preventDefault()
+    const request: LoginCredentials = {
+      email: user.email,
+      password: user.password
+    }
+    getLogin(request).then(response => {
+      setToken(response.data.accessToken)
+      props.setIsLogged(true)
+      navigate('/')
+    }).catch((error: Error | AxiosError) => {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          setErrorMessage('Wrong email and/or password.')
+        }
+      }
+    }
+    )
+  }
+
   return (
-    <form className="form" action="" method="">
-      <label>Username</label>
-      <input className = "login-input" type="text" placeholder="Enter Username" name="uname" required/>
-      <br/>
-      <label>Password</label>
-      <input className = "login-input" type="password" placeholder="Enter Password" name="psw" required/>
-      <br/>
-      <button type="submit">Login</button>
+    <form className="form" onSubmit={handleSubmit}>
+      <input
+        className = "login-input"
+        type="email"
+        placeholder="Email"
+        onChange={(e) => setUser(prevState => ({ ...prevState, email: e.target.value }))} required
+      />
+      <input
+        className = "login-input"
+        type="password"
+        placeholder="Password"
+        onChange={(e) => setUser(prevState => ({ ...prevState, password: e.target.value }))} required
+      />
+      <label className='error-message'>{errorMessage}</label>
+      <input className = "submit" type="submit" value="Sign In" />
     </form>
   )
 }

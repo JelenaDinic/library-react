@@ -12,14 +12,24 @@
         left: 0;
         top: 0;
       }
-      
+
       .navbar-content {
         display: flex;
         flex-direction: column;
         margin: 2vw;
+        height: 100%;
+      }
+
+      .navbar-icon-logout {
+        position: absolute;
+        bottom: 10px;
       }
       
-      .icon {
+      .navbar-icon {
         padding-block: 30%;
+      }
+
+      .icon:hover {
+        color: #f6ecde !important;
       }
 }

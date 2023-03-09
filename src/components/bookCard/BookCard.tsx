@@ -1,9 +1,12 @@
 import './BookCard.css'
+import noCover from  '../../assets/no-cover.png'
 
 function BookCard() {
   return (
     <div className="card">
-        BOOK CARD
+      <img src={noCover}/>
+      <p>Name: </p>
+      <p>Available: </p>
     </div>
   )
 }
