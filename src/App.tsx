@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
@@ -7,29 +7,9 @@ import Header from './components/header/Header'
 import Menu from './components/menu/Menu'
 import NavBar from './components/navBar/NavBar'
 import routes from './route-config'
-import { baseAxios } from './services/api.service'
 
 function App() {
   const [ isLogged, setIsLogged ] = useState(false)
-
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      setIsLogged(true)
-    }
-  }, [])
-
-  baseAxios.interceptors.request.use(
-    config => {
-      const token = localStorage.getItem('token')
-      if (token) {
-        config.headers['Authorization'] = 'Bearer ' + token
-      }
-      return config
-    },
-    error => {
-      void Promise.reject(error)
-    }
-  )
 
   return (
     <BrowserRouter>

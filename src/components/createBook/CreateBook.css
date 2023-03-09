@@ -1,0 +1,18 @@
+.single-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: #849d9b;
+    padding: 3%;
+    height: 100%;
+    margin-top: 70px;
+    width: 300px
+}
+.cover {
+    height: 70p;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+}

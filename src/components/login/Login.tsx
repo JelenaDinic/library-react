@@ -1,16 +1,16 @@
-// import { useState } from 'react'
-
 import { FormEvent, useState } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
 import LoginCredentials from '../../interfaces/LoginCredentials'
 import { getLogin } from '../../services/auth.service'
+import { setToken } from '../../services/token.service'
 
 import './Login.css'
 
 function Login(props: { setIsLogged : React.Dispatch<React.SetStateAction<boolean>> }) {
   const [ user, setUser ] = useState({ email: '', password: '' })
+  const [ errorMessage, setErrorMessage ] = useState ('')
   const navigate = useNavigate()
 
   const handleSubmit = (e : FormEvent) => {
@@ -20,16 +20,27 @@ function Login(props: { setIsLogged : React.Dispatch<React.SetStateAction<boolea
       password: user.password
     }
     getLogin(request).then(response => {
-      localStorage.setItem('token', response.data.accessToken)
+      setToken(response.data.accessToken)
       props.setIsLogged(true)
       navigate('/')
-    }).catch(error => {alert(error)})
+    }).catch(() => {setErrorMessage('Wrong email and/or password.')})
   }
 
   return (
     <form className="form" onSubmit={handleSubmit}>
-      <input className = "login-input" type="email" placeholder="Email" name="uname" onChange={(e) => setUser(prevState => ({ ...prevState, email: e.target.value }))} required/>
-      <input className = "login-input" type="password" placeholder="Password" name="psw" onChange={(e) => setUser(prevState => ({ ...prevState, password: e.target.value }))} required/>
+      <input
+        className = "login-input"
+        type="email"
+        placeholder="Email"
+        onChange={(e) => setUser(prevState => ({ ...prevState, email: e.target.value }))} required
+      />
+      <input
+        className = "login-input"
+        type="password"
+        placeholder="Password"
+        onChange={(e) => setUser(prevState => ({ ...prevState, password: e.target.value }))} required
+      />
+      <label className='error-message'>{errorMessage}</label>
       <input className = "submit" type="submit" value="Sign In" />
     </form>
   )

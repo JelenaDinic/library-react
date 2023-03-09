@@ -2,7 +2,7 @@ import './Profile.css'
 
 function Profile() {
   return (
-    <form className="profile" action="" method="">
+    <form className="profile">
       <div  className='profile-section'>
         <label className="profile-label" >Firstname</label>
         <input className = "login-input" type="text" name="firstname" disabled/>

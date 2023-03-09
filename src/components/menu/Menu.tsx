@@ -6,10 +6,12 @@ import { CgProfile as ProfileIcon } from 'react-icons/cg'
 import { GiBookshelf as BooksIcon } from 'react-icons/gi'
 import { NavLink } from 'react-router-dom'
 
+import { removeToken } from '../../services/token.service'
+
 function Menu(props: { setIsLogged : React.Dispatch<React.SetStateAction<boolean>>, isLogged : boolean }) {
 
   const logout = () => {
-    localStorage.removeItem('token')
+    removeToken()
     props.setIsLogged(false)
   }
   return (
