@@ -1,5 +1,6 @@
 import { FormEvent, useState } from 'react'
 
+import axios, { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 import LoginCredentials from '../../interfaces/LoginCredentials'
@@ -23,7 +24,14 @@ function Login(props: { setIsLogged : React.Dispatch<React.SetStateAction<boolea
       setToken(response.data.accessToken)
       props.setIsLogged(true)
       navigate('/')
-    }).catch(() => {setErrorMessage('Wrong email and/or password.')})
+    }).catch((error: Error | AxiosError) => {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          setErrorMessage('Wrong email and/or password.')
+        }
+      }
+    }
+    )
   }
 
   return (
