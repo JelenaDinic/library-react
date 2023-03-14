@@ -1,16 +1,15 @@
-import BookCard from '../bookCard/BookCard'
+import BookItem from '../../interfaces/BookItem'
 import './BookList.css'
 
-function BookList() {
+interface Props {
+  bookList: BookItem[]
+}
+
+function BookList({ bookList } : Props) {
+
   return (
     <div className='book-list'>
-      <BookCard/>
-      <BookCard/>
-      <BookCard/>
-      <BookCard/>
-      <BookCard/>
-      <BookCard/>
-      <BookCard/>
+      <></>
     </div>
   )
 }

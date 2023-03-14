@@ -13,18 +13,20 @@ import { createBook } from '../../services/book.service'
 import CreateAuthorModal from '../createAuthorModal/CreateAuthor'
 import './CreateBook.css'
 
+const initialBook: Book = { Title: '', ISBN: '', Quantity: 0, AuthorsIds: [], Description: '', PublishDate: '' }
+
 function CreateBook() {
   const [ authorList, setAuthorList ] = useState<AuthorResponse[]>([])
   const [ selectedAuthors, setSelectedAuthors ] = useState<AuthorResponse[]>([])
   const [ isAuthorsChanged, setIsAuthorsChanged ] = useState(false)
   const [ cover, setCover ] = useState(noCover)
   const [ show, setShow ] = useState(false)
-  const navigate = useNavigate()
   const [ titleErrorMessage, setTitleErrorMessage ] = useState ('')
   const [ ISBNErrorMessage, setISBNErrorMessage ] = useState ('')
   const [ quantityErrorMessage, setQuantityErrorMessage ] = useState ('')
   const [ requestCover, setRequestCover ] = useState<Blob>(new Blob)
-  const [ book, setBook ] = useState<Book>({ Title: '', ISBN: '', Quantity: 0, AuthorsIds: [], Description: '', PublishDate: '' })
+  const [ book, setBook ] = useState<Book>(initialBook)
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchAuthors()
@@ -56,18 +58,22 @@ function CreateBook() {
 
   const create = () => {
     if(validate()) {
-      const formData = new FormData()
-      formData.append('Title', book.Title)
-      formData.append('Cover', requestCover)
-      formData.append('Description', book.Description)
-      formData.append('Quantity', book.Quantity.toString())
-      formData.append('ISBN', book.ISBN)
-      formData.append('PublishDate', book.PublishDate)
-      selectedAuthors.forEach(author => formData.append('AuthorIds', author.Id.toString()))
-      createBook(formData).then(() => {
-        navigate('/Books')
-      }). catch(error => {console.error(error)})
+      createBook(prepareFormData())
+        .then(() => {navigate('/Books')})
+        .catch(error => {console.error(error)})
     }
+  }
+
+  const prepareFormData = () : FormData => {
+    const formData = new FormData()
+    formData.append('Title', book.Title)
+    formData.append('Cover', requestCover)
+    formData.append('Description', book.Description)
+    formData.append('Quantity', book.Quantity.toString())
+    formData.append('ISBN', book.ISBN)
+    formData.append('PublishDate', book.PublishDate)
+    selectedAuthors.forEach(author => formData.append('AuthorIds', author.Id.toString()))
+    return formData
   }
 
   const validate = () : boolean=> {

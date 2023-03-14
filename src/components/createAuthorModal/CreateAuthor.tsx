@@ -1,10 +1,16 @@
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react';
 
-import AuthorRequest from '../../interfaces/AuthorRequest'
-import { createAuthor } from '../../services/author.service'
-import './CreateAuthor.css'
+import AuthorRequest from '../../interfaces/AuthorRequest';
+import { createAuthor } from '../../services/author.service';
+import './CreateAuthor.css';
 
-function CreateAuthorModal(props: {show : boolean, closeModal: () => void, setIsAuthorsChanged : Dispatch<SetStateAction<boolean>>}) {
+interface Props {
+  show : boolean;
+  closeModal: () => void;
+  setIsAuthorsChanged : Dispatch<SetStateAction<boolean>>
+}
+
+function CreateAuthorModal(props: Props) {
   const [ author, setAuthor ] = useState<AuthorRequest>({ FirstName: '', LastName: '' })
   const [ errorMessage, setErrorMessage ] = useState('')
 
@@ -32,13 +38,13 @@ function CreateAuthorModal(props: {show : boolean, closeModal: () => void, setIs
       <div className="content">
         <h2>Add new author</h2>
         <div  className='section'>
-          <label className="fn-label" >Firstname</label>
+          <label className="firstname-label" >Firstname</label>
           <input className = "form-input" type="text"
             onChange={(e) => setAuthor(prevState => ({ ...prevState, FirstName: e.target.value }))}
           />
         </div>
         <div className='section'>
-          <label className="ln-label" >Lastname</label>
+          <label className="lastname-label" >Lastname</label>
           <input className = "form-input" type="text"
             onChange={(e) => setAuthor(prevState => ({ ...prevState, LastName: e.target.value }))}
           />

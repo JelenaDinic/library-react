@@ -9,7 +9,11 @@ import { setToken } from '../../services/token.service'
 
 import './Login.css'
 
-function Login(props: { setIsLogged : React.Dispatch<React.SetStateAction<boolean>> }) {
+interface Props {
+  setIsLogged : React.Dispatch<React.SetStateAction<boolean>>
+}
+
+function Login({ setIsLogged } : Props) {
   const [ user, setUser ] = useState({ Email: '', Password: '' })
   const [ errorMessage, setErrorMessage ] = useState ('')
   const navigate = useNavigate()
@@ -22,7 +26,7 @@ function Login(props: { setIsLogged : React.Dispatch<React.SetStateAction<boolea
     }
     getLogin(request).then(response => {
       setToken(response.data.AccessToken)
-      props.setIsLogged(true)
+      setIsLogged(true)
       navigate('/')
     }).catch((error: Error | AxiosError) => {
       if (axios.isAxiosError(error)) {

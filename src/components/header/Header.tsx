@@ -4,13 +4,17 @@ import { AiOutlineSortDescending as SortIcon } from 'react-icons/ai'
 import { BiFilterAlt as FilterIcon, BiSearchAlt as SearchIcon } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 
-function Header(props: { isLogged : boolean }) {
+interface Props {
+  isLogged : boolean
+}
+
+function Header({ isLogged } : Props) {
   const navigate = useNavigate()
 
   return (
     <div className='header'>
       {
-        props.isLogged === true ?
+        isLogged === true ?
 
           <div className='header-content'>
             <SearchIcon className = "header-icon" color='#fce4db' size={30}/>
