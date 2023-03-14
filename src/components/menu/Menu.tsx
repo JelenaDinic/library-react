@@ -23,7 +23,7 @@ function Menu( props  : Props) {
     <div className='menu'>
       <div className='menu-content'>
         <NavLink to="/Profile" ><ProfileIcon size={25} color="#fce4db"/></NavLink>
-        <NavLink to="/Books" ><BooksIcon size={25} color="#fce4db"/></NavLink>
+        <NavLink to="/Home" ><BooksIcon size={25} color="#fce4db"/></NavLink>
         {props.isLogged && <NavLink onClick={() => { logout() } } to='/Login' ><LogoutIcon size={25} color="#fce4db" /></NavLink>}
         <MoreIcon size={25} color="#fce4db"/>
       </div>

@@ -1,0 +1,14 @@
+.loading {
+    color: antiquewhite;
+}
+
+.home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.available-title {
+    text-transform: uppercase;
+    color: #e58f23;
+}
