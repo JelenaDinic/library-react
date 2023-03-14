@@ -1,10 +1,10 @@
 .header {
     display: flex;
     justify-content: center;
-    margin-top: 3px;
     border-bottom: 1px solid #fce4db;
     width: 100%;
     position: fixed;
+    background-color: #2c2b3d;
 }
 
 .header-content {

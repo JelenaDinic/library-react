@@ -9,7 +9,12 @@ import { NavLink } from 'react-router-dom'
 
 import { removeToken } from '../../services/token.service'
 
-function NavBar(props: { setIsLogged : React.Dispatch<React.SetStateAction<boolean>>, isLogged : boolean  }) {
+interface Props {
+  setIsLogged : React.Dispatch<React.SetStateAction<boolean>>
+  isLogged : boolean
+}
+
+function NavBar(props  : Props) {
 
   const logout = () => {
     removeToken()
