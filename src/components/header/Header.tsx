@@ -26,7 +26,7 @@ function Header({ isLogged, setSearchInput } : Props) {
   return (
     <div className='header'>
       {
-        isLogged === true ?
+        isLogged ?
 
           <div className='header-content'>
             <SearchIcon className = "header-icon" color='#fce4db' size={30}/>

@@ -14,7 +14,7 @@ interface Props {
 }
 
 function Login({ setIsLogged } : Props) {
-  const [ user, setUser ] = useState({ Email: '', Password: '' })
+  const [ user, setUser ] = useState<LoginCredentials>({ Email: '', Password: '' })
   const [ errorMessage, setErrorMessage ] = useState ('')
   const navigate = useNavigate()
 

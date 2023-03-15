@@ -1,29 +1,28 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 
 import AuthorRequest from '../../interfaces/AuthorRequest';
-import { createAuthor } from '../../services/author.service';
+import { create } from '../../services/author.service';
 import './CreateAuthor.css';
 
 interface Props {
-  show : boolean;
   closeModal: () => void;
   setIsAuthorsChanged : Dispatch<SetStateAction<boolean>>
 }
 
-function CreateAuthorModal(props: Props) {
+function CreateAuthor(props: Props) {
   const [ author, setAuthor ] = useState<AuthorRequest>({ FirstName: '', LastName: '' })
   const [ errorMessage, setErrorMessage ] = useState('')
 
-  const create = () => {
-    if(validate()) {
-      createAuthor(author).then(() => {
+  const createAuthor = () => {
+    if(validateInput()) {
+      create(author).then(() => {
         props.closeModal()
         props.setIsAuthorsChanged(true)
       })
         .catch(() => {setErrorMessage('Unable to create new author.')})
     }
   }
-  const validate = () : boolean => {
+  const validateInput = () : boolean => {
     if(author.FirstName.trim() === '' || author.LastName.trim() === '') {
       setErrorMessage('Please fill all the fields.')
       return false
@@ -31,7 +30,6 @@ function CreateAuthorModal(props: Props) {
     return true
   }
 
-  if (!props.show) return null
   return(
     <div className="modal">
       <div className="overlay" onClick={props.closeModal}/>
@@ -49,9 +47,9 @@ function CreateAuthorModal(props: Props) {
             onChange={(e) => setAuthor(prevState => ({ ...prevState, LastName: e.target.value }))}
           />
         </div>
-        <label className='error-message'>{errorMessage}</label>
+        {errorMessage && <label className='error-message'>{errorMessage}</label>}
         <div className='author-btns'>
-          <button onClick={create}>Create </button>
+          <button onClick={createAuthor}>Create </button>
           <button className= 'cancel-btn' onClick={props.closeModal}>Cancel </button>
         </div>
       </div>
@@ -60,4 +58,4 @@ function CreateAuthorModal(props: Props) {
   )
 }
 
-export default CreateAuthorModal
+export default CreateAuthor

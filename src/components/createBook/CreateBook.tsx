@@ -9,8 +9,8 @@ import noCover from '../../assets/no-cover.png'
 import AuthorResponse from '../../interfaces/AuthorResponse'
 import Book from '../../interfaces/Book'
 import { getAuthors } from '../../services/author.service'
-import { createBook } from '../../services/book.service'
-import CreateAuthorModal from '../createAuthorModal/CreateAuthor'
+import { create } from '../../services/book.service'
+import CreateAuthor from '../createAuthor/CreateAuthor'
 import './CreateBook.css'
 
 const initialBook: Book = { Title: '', ISBN: '', Quantity: 0, AuthorsIds: [], Description: '', PublishDate: '' }
@@ -38,7 +38,7 @@ function CreateBook() {
     }).catch(error => {console.error(error)})
   }
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target?.files
     const reader = new FileReader()
     if(files!= null) {
@@ -56,9 +56,9 @@ function CreateBook() {
     setSelectedAuthors(authorsData as AuthorResponse[])
   }
 
-  const create = () => {
-    if(validate()) {
-      createBook(prepareFormData())
+  const createBook = () => {
+    if(validateInput()) {
+      create(prepareFormData())
         .then(() => {navigate('/Books')})
         .catch(error => {console.error(error)})
     }
@@ -76,7 +76,7 @@ function CreateBook() {
     return formData
   }
 
-  const validate = () : boolean=> {
+  const validateInput = () : boolean=> {
     const isTitleInvalid = book.Title.trim() === ''
     if (isTitleInvalid) {
       setTitleErrorMessage('Title is required.')
@@ -86,11 +86,11 @@ function CreateBook() {
       setQuantityErrorMessage('Minimum quantity is 1.')
     }
     const isbnRegex = new RegExp('^(?=(?:\\D*\\d){10}(?:(?:\\D*\\d){3})?$)[\\d-]+$')
-    const isDateInvalid = book.ISBN.trim() === '' || !isbnRegex.test(book.ISBN)
-    if (isDateInvalid) {
+    const isIsbnInvalid = book.ISBN.trim() === '' || !isbnRegex.test(book.ISBN)
+    if (isIsbnInvalid) {
       setISBNErrorMessage('ISBN is required and must contains ten numbers')
     }
-    if(isDateInvalid || isQuantityInvalid || isTitleInvalid)
+    if(isIsbnInvalid || isQuantityInvalid || isTitleInvalid)
       return false
 
     return true
@@ -102,7 +102,7 @@ function CreateBook() {
         <div className='cover-section'>
           <div  className='section'>
             <img className= "cover" src={cover}/>
-            <input type="file" onChange={(event) => handleChange(event)}/>
+            <input type="file" onChange={(event) => handleImageChange(event)}/>
           </div>
         </div>
         <div className='forms-sections'>
@@ -142,7 +142,7 @@ function CreateBook() {
                 onChange={handleSelectedAuthorsChange}
               />
               <button className='add-btn' onClick={() => setShow((s) => !s)}><AddIcon className = "icon" size={40} color="#fce4db" /></button>
-              <CreateAuthorModal setIsAuthorsChanged={setIsAuthorsChanged} show={show} closeModal={() => setShow(false)}/>
+              { show && <CreateAuthor setIsAuthorsChanged={setIsAuthorsChanged} closeModal={() => setShow(false)}/>}
             </div>
           </div>
           <div className='section'>
@@ -161,7 +161,7 @@ function CreateBook() {
         </div>
 
       </div>
-      <button onClick={create}>Create</button>
+      <button onClick={createBook}>Create</button>
     </div>
   )
 }

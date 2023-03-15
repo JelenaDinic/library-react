@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import './HomePage.css'
 
 import BookItem from '../../interfaces/BookItem'
+import BooksRequest from '../../interfaces/BooksRequest'
 import { getBooksPaged } from '../../services/book.service'
 import BookList from '../bookList/BookList'
 
@@ -24,8 +25,12 @@ function HomePage( { searchInput } : Props) {
     setPageNumber(pageNumber + 1)
   }
 
-  const feachBooks = () => {
-    getBooksPaged({ PageNumber: pageNumber, PageLength: initialPageLenght, Where: [ { Field: 'Title', Value: searchInput, Operation: 2 } ] }).then((response =>
+  const fetchBooks = () => {
+    const booksRequest : BooksRequest = {
+      PageNumber: pageNumber,
+      PageLength: initialPageLenght,
+      Where: [ { Field: 'Title', Value: searchInput, Operation: 2 } ] }
+    getBooksPaged(booksRequest).then((response =>
     {
       setHasMore(pageNumber * initialPageLenght <= response.data.TotalCount)
       setBookList((bookList) => [ ...bookList, ...response.data.Items ])
@@ -38,7 +43,7 @@ function HomePage( { searchInput } : Props) {
       setPageNumber(1)
       currentSearch.current = searchInput
     }
-    feachBooks()
+    fetchBooks()
   }, [ pageNumber, searchInput ])
 
 
