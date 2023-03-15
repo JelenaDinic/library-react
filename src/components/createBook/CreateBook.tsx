@@ -9,7 +9,7 @@ import noCover from '../../assets/no-cover.png'
 import AuthorResponse from '../../interfaces/AuthorResponse'
 import Book from '../../interfaces/Book'
 import { getAuthors } from '../../services/author.service'
-import { create } from '../../services/book.service'
+import bookService from '../../services/book.service'
 import CreateAuthor from '../createAuthor/CreateAuthor'
 import './CreateBook.css'
 
@@ -58,7 +58,7 @@ function CreateBook() {
 
   const createBook = () => {
     if(validateInput()) {
-      create(prepareFormData())
+      bookService.create(prepareFormData())
         .then(() => {navigate('/Books')})
         .catch(error => {console.error(error)})
     }

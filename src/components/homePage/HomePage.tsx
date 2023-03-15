@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 
+import { AxiosResponse } from 'axios'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
-import './HomePage.css'
-
 import BookItem from '../../interfaces/BookItem'
+import BookResponse from '../../interfaces/BookResponse'
 import BooksRequest from '../../interfaces/BooksRequest'
 import WhereObject from '../../interfaces/WhereObject'
-import { getBooksPaged } from '../../services/book.service'
+import bookService from '../../services/book.service'
 import BookList from '../bookList/BookList'
+import './HomePage.css'
 
 const initialPageLenght  = 12
 
@@ -35,11 +36,11 @@ function HomePage( { searchInput, filters } : Props) {
       PageLength: initialPageLenght,
       Where: [ ...filters, ...[ { Field: 'Title', Value: searchInput, Operation: 2 } ] ]
     }
-    getBooksPaged(booksRequest).then((response =>
+    bookService.getBooksPaged(booksRequest).then((response:AxiosResponse<BookResponse>) =>
     {
       setHasMore(pageNumber * initialPageLenght <= response.data.TotalCount)
       setBookList((bookList) => [ ...bookList, ...response.data.Items ])
-    })).catch((error) => console.error(error))
+    }).catch((error) => console.error(error))
   }
 
   useEffect(() => {

@@ -20,5 +20,10 @@ const paramsToUrl = (booksRequest: BooksRequest) => {
   return result
 }
 
-export const create = (formData: FormData)  => baseAxios.post('/Books', formData)
-export const getBooksPaged = (booksRequest : BooksRequest) : Promise<AxiosResponse<BookResponse>>  => baseAxios.get<BookResponse>('/Books/paged' + paramsToUrl(booksRequest))
+const create = (formData: FormData)  => baseAxios.post('/Books', formData)
+const getBooksPaged = (booksRequest : BooksRequest) : Promise<AxiosResponse<BookResponse>>  => baseAxios.get<BookResponse>('/Books/paged' + paramsToUrl(booksRequest))
+
+export default {
+  create,
+  getBooksPaged
+}
