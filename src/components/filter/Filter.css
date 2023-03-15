@@ -1,0 +1,18 @@
+.filter-buttons {
+    display: flex;
+}
+
+.cancel-button {
+    background-color: #D2042D;
+}
+
+.cancel-button:hover {
+    background-color: #D22B2B;
+}
+
+.content {
+    color: antiquewhite;
+    display: flex;
+    align-items: center;
+    gap: 10px
+}

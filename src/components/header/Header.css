@@ -26,6 +26,7 @@
 
 .header-icon {
     margin-right: 10px;
+    cursor: pointer;
 }
 
 .search:focus {

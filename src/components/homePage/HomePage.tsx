@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import InfiniteScroll from 'react-infinite-scroll-component'
 
@@ -6,6 +6,7 @@ import './HomePage.css'
 
 import BookItem from '../../interfaces/BookItem'
 import BooksRequest from '../../interfaces/BooksRequest'
+import WhereObject from '../../interfaces/WhereObject'
 import { getBooksPaged } from '../../services/book.service'
 import BookList from '../bookList/BookList'
 
@@ -13,13 +14,16 @@ const initialPageLenght  = 12
 
 interface Props {
   searchInput : string
+  filters : WhereObject[]
 }
 
-function HomePage( { searchInput } : Props) {
+function HomePage( { searchInput, filters } : Props) {
   const [ bookList, setBookList ] = useState<BookItem[]>([])
   const [ pageNumber, setPageNumber ] = useState(1)
   const [ hasMore, setHasMore ] = useState(false)
-  const currentSearch = useRef<string>(searchInput)
+  const [ currentSearch, setCurrentSearch ] = useState<string>(searchInput)
+  const [ currentFilters, setCurrentFilters ] = useState<WhereObject[]>(filters)
+
 
   const addNextPage = () => {
     setPageNumber(pageNumber + 1)
@@ -29,7 +33,8 @@ function HomePage( { searchInput } : Props) {
     const booksRequest : BooksRequest = {
       PageNumber: pageNumber,
       PageLength: initialPageLenght,
-      Where: [ { Field: 'Title', Value: searchInput, Operation: 2 } ] }
+      Where: [ ...filters, ...[ { Field: 'Title', Value: searchInput, Operation: 2 } ] ]
+    }
     getBooksPaged(booksRequest).then((response =>
     {
       setHasMore(pageNumber * initialPageLenght <= response.data.TotalCount)
@@ -38,13 +43,18 @@ function HomePage( { searchInput } : Props) {
   }
 
   useEffect(() => {
-    if (currentSearch.current !== searchInput) {
+    if (currentSearch !== searchInput) {
       setBookList([])
       setPageNumber(1)
-      currentSearch.current = searchInput
+      setCurrentSearch(searchInput)
+    }
+    if (currentFilters !== filters) {
+      setBookList([])
+      setPageNumber(1)
+      setCurrentFilters(filters)
     }
     fetchBooks()
-  }, [ pageNumber, searchInput ])
+  }, [ pageNumber, searchInput, filters ])
 
 
   return (

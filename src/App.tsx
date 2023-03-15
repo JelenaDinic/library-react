@@ -6,22 +6,24 @@ import './App.css'
 import Header from './components/header/Header'
 import Menu from './components/menu/Menu'
 import NavBar from './components/navBar/NavBar'
+import WhereObject from './interfaces/WhereObject'
 import routes from './route-config'
 import { getToken } from './services/token.service'
 
 function App() {
   const [ isLogged, setIsLogged ] = useState(false)
   const [ searchInput, setSearchInput ] = useState('')
+  const [ filters, setFilters ] = useState<WhereObject[]>([])
 
   useEffect(() => {
     if (getToken()) {
       setIsLogged(true)
     }
-  }, [ searchInput ])
+  }, [ searchInput, filters ])
 
   return (
     <BrowserRouter>
-      <Header setSearchInput={setSearchInput} isLogged={isLogged} />
+      <Header setSearchInput={setSearchInput} setFilters={setFilters} isLogged={isLogged} />
       <div className='main-layout'>
         <NavBar setIsLogged={setIsLogged}  isLogged={isLogged}/>
         <div className='container'>
@@ -30,7 +32,7 @@ function App() {
               <Route
                 key={route.path}
                 path={route.path}
-                element={<route.component searchInput={searchInput} setIsLogged={setIsLogged} />}
+                element={<route.component filters={filters} searchInput={searchInput} setIsLogged={setIsLogged} />}
               />
             )}
           </Routes>
