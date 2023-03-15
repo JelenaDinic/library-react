@@ -1,19 +1,53 @@
 .card {
     border: 1px solid #fce4db;
-    width: 300px;
-    height: 450px;
+    width: 350px;
+    height: 550px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-bottom: 15px;
+    align-items: center;
     background-color: #849d9b;
-    padding-left: 10%;
-    padding-right: 10%;
+    color: #fce4db;
+}
+
+.card-cover {
+    object-fit: cover;
+    height: 300px;
+    width: 250px;
+    transition: transform 0.25s;
+}
+
+.card-cover:hover {
+    transform: scale(1.05);
+}
+
+.card-title {
+    text-transform: uppercase;
+    color: #e58f23;
+    margin-bottom: unset;
+    text-align: center;
+}
+
+.card-buttons {
+    display: flex;
+
+}
+
+.delete-button {
+    background-color: #D2042D;
+    width: fit-content;
+}
+
+.delete-button:hover {
+    background-color: #D22B2B;
+}
+
+.detail-button {
+    width: fit-content;
 }
 
 @media (min-width: 750px) {
     .card {
         margin-left: 100px;
-        padding: 2%;
     }
 }

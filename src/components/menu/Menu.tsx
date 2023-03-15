@@ -8,7 +8,12 @@ import { NavLink } from 'react-router-dom'
 
 import { removeToken } from '../../services/token.service'
 
-function Menu(props: { setIsLogged : React.Dispatch<React.SetStateAction<boolean>>, isLogged : boolean }) {
+interface Props {
+  setIsLogged : React.Dispatch<React.SetStateAction<boolean>>
+  isLogged : boolean
+}
+
+function Menu( props  : Props) {
 
   const logout = () => {
     removeToken()
@@ -18,7 +23,7 @@ function Menu(props: { setIsLogged : React.Dispatch<React.SetStateAction<boolean
     <div className='menu'>
       <div className='menu-content'>
         <NavLink to="/Profile" ><ProfileIcon size={25} color="#fce4db"/></NavLink>
-        <NavLink to="/Books" ><BooksIcon size={25} color="#fce4db"/></NavLink>
+        <NavLink to="/Home" ><BooksIcon size={25} color="#fce4db"/></NavLink>
         {props.isLogged && <NavLink onClick={() => { logout() } } to='/Login' ><LogoutIcon size={25} color="#fce4db" /></NavLink>}
         <MoreIcon size={25} color="#fce4db"/>
       </div>

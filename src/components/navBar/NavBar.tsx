@@ -9,7 +9,12 @@ import { NavLink } from 'react-router-dom'
 
 import { removeToken } from '../../services/token.service'
 
-function NavBar(props: { setIsLogged : React.Dispatch<React.SetStateAction<boolean>>, isLogged : boolean  }) {
+interface Props {
+  setIsLogged : React.Dispatch<React.SetStateAction<boolean>>
+  isLogged : boolean
+}
+
+function NavBar(props  : Props) {
 
   const logout = () => {
     removeToken()
@@ -19,9 +24,9 @@ function NavBar(props: { setIsLogged : React.Dispatch<React.SetStateAction<boole
   return (
     <div className='navbar'>
       <div className='navbar-content'>
-        <NavLink className = "navbar-icon" to="/Books" ><HomeIcon className = "icon" size={50} color="#fce4db" /></NavLink>
+        <NavLink className = "navbar-icon" to="/Home" ><HomeIcon className = "icon" size={50} color="#fce4db" /></NavLink>
         <NavLink className = "navbar-icon" to="/Profile" ><ProfileIcon className = "icon" size={50} color="#fce4db" /></NavLink>
-        <NavLink className = "navbar-icon" to="/Books" ><BooksIcon className = "icon" size={50} color="#fce4db" /></NavLink>
+        <NavLink className = "navbar-icon" to="/Home" ><BooksIcon className = "icon" size={50} color="#fce4db" /></NavLink>
         <NavLink className = "navbar-icon" to="/CreateBook" ><AddIcon className = "icon" size={50} color="#fce4db" /></NavLink>
         {props.isLogged && <NavLink className="navbar-icon-logout" onClick={() => { logout() } } to='/Login' ><LogoutIcon className = "icon"size={50} color="#fce4db" /></NavLink>}
       </div>

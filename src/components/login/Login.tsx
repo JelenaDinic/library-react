@@ -9,20 +9,24 @@ import { setToken } from '../../services/token.service'
 
 import './Login.css'
 
-function Login(props: { setIsLogged : React.Dispatch<React.SetStateAction<boolean>> }) {
-  const [ user, setUser ] = useState({ email: '', password: '' })
+interface Props {
+  setIsLogged : React.Dispatch<React.SetStateAction<boolean>>
+}
+
+function Login({ setIsLogged } : Props) {
+  const [ user, setUser ] = useState<LoginCredentials>({ Email: '', Password: '' })
   const [ errorMessage, setErrorMessage ] = useState ('')
   const navigate = useNavigate()
 
   const handleSubmit = (e : FormEvent) => {
     e.preventDefault()
     const request: LoginCredentials = {
-      email: user.email,
-      password: user.password
+      Email: user.Email,
+      Password: user.Password
     }
     getLogin(request).then(response => {
-      setToken(response.data.accessToken)
-      props.setIsLogged(true)
+      setToken(response.data.AccessToken)
+      setIsLogged(true)
       navigate('/')
     }).catch((error: Error | AxiosError) => {
       if (axios.isAxiosError(error)) {
@@ -40,13 +44,13 @@ function Login(props: { setIsLogged : React.Dispatch<React.SetStateAction<boolea
         className = "login-input"
         type="email"
         placeholder="Email"
-        onChange={(e) => setUser(prevState => ({ ...prevState, email: e.target.value }))} required
+        onChange={(e) => setUser(prevState => ({ ...prevState, Email: e.target.value }))} required
       />
       <input
         className = "login-input"
         type="password"
         placeholder="Password"
-        onChange={(e) => setUser(prevState => ({ ...prevState, password: e.target.value }))} required
+        onChange={(e) => setUser(prevState => ({ ...prevState, Password: e.target.value }))} required
       />
       <label className='error-message'>{errorMessage}</label>
       <input className = "submit" type="submit" value="Sign In" />
