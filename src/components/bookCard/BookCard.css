@@ -1,7 +1,7 @@
 .card {
     border: 1px solid #fce4db;
-    width: 300px;
-    height: 500px;
+    width: 350px;
+    height: 550px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -14,6 +14,11 @@
     object-fit: cover;
     height: 300px;
     width: 250px;
+    transition: transform 0.25s;
+}
+
+.card-cover:hover {
+    transform: scale(1.05);
 }
 
 .card-title {
@@ -21,6 +26,24 @@
     color: #e58f23;
     margin-bottom: unset;
     text-align: center;
+}
+
+.card-buttons {
+    display: flex;
+
+}
+
+.delete-button {
+    background-color: #D2042D;
+    width: fit-content;
+}
+
+.delete-button:hover {
+    background-color: #D22B2B;
+}
+
+.detail-button {
+    width: fit-content;
 }
 
 @media (min-width: 750px) {

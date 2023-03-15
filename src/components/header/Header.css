@@ -5,6 +5,7 @@
     width: 100%;
     position: fixed;
     background-color: #2c2b3d;
+    z-index: 10;
 }
 
 .header-content {
@@ -20,6 +21,7 @@
     border: none;
     border-bottom: 1px solid #e58f23;
     margin-right: 10px;
+    color: #fce4db;
 }
 
 .header-icon {

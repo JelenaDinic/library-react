@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import InfiniteScroll from 'react-infinite-scroll-component'
 
@@ -10,22 +10,36 @@ import BookList from '../bookList/BookList'
 
 const initialPageLenght  = 12
 
-function HomePage() {
+interface Props {
+  searchInput : string
+}
+
+function HomePage( { searchInput } : Props) {
   const [ bookList, setBookList ] = useState<BookItem[]>([])
   const [ pageNumber, setPageNumber ] = useState(1)
   const [ hasMore, setHasMore ] = useState(false)
+  const currentSearch = useRef<string>(searchInput)
 
   const addNextPage = () => {
     setPageNumber(pageNumber + 1)
   }
 
-  useEffect(() => {
-    getBooksPaged({ PageNumber: pageNumber, PageLength: initialPageLenght, Where: [ { Field: 'Title', Value: '', Operation: 2 } ] }).then((response =>
+  const feachBooks = () => {
+    getBooksPaged({ PageNumber: pageNumber, PageLength: initialPageLenght, Where: [ { Field: 'Title', Value: searchInput, Operation: 2 } ] }).then((response =>
     {
       setHasMore(pageNumber * initialPageLenght <= response.data.TotalCount)
-      setBookList([ ...bookList, ...response.data.Items ])
+      setBookList((bookList) => [ ...bookList, ...response.data.Items ])
     })).catch((error) => console.error(error))
-  }, [ pageNumber ])
+  }
+
+  useEffect(() => {
+    if (currentSearch.current !== searchInput) {
+      setBookList([])
+      setPageNumber(1)
+      currentSearch.current = searchInput
+    }
+    feachBooks()
+  }, [ pageNumber, searchInput ])
 
 
   return (

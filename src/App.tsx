@@ -11,16 +11,17 @@ import { getToken } from './services/token.service'
 
 function App() {
   const [ isLogged, setIsLogged ] = useState(false)
+  const [ searchInput, setSearchInput ] = useState('')
 
   useEffect(() => {
     if (getToken()) {
       setIsLogged(true)
     }
-  }, [])
+  }, [ searchInput ])
 
   return (
     <BrowserRouter>
-      <Header isLogged={isLogged} />
+      <Header setSearchInput={setSearchInput} isLogged={isLogged} />
       <div className='main-layout'>
         <NavBar setIsLogged={setIsLogged}  isLogged={isLogged}/>
         <div className='container'>
@@ -29,7 +30,7 @@ function App() {
               <Route
                 key={route.path}
                 path={route.path}
-                element={<route.component setIsLogged={setIsLogged} />}
+                element={<route.component searchInput={searchInput} setIsLogged={setIsLogged} />}
               />
             )}
           </Routes>
