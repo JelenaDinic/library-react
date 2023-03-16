@@ -14,6 +14,7 @@ function App() {
   const [ isLogged, setIsLogged ] = useState(false)
   const [ searchInput, setSearchInput ] = useState('')
   const [ filters, setFilters ] = useState<WhereObject[]>([])
+  const [ sorts, setSorts ] = useState<string[]>([])
 
   useEffect(() => {
     if (getToken()) {
@@ -23,7 +24,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Header setSearchInput={setSearchInput} setFilters={setFilters} isLogged={isLogged} />
+      <Header setSorts={setSorts} setSearchInput={setSearchInput} setFilters={setFilters} isLogged={isLogged} />
       <div className='main-layout'>
         <NavBar setIsLogged={setIsLogged}  isLogged={isLogged}/>
         <div className='container'>
@@ -32,7 +33,7 @@ function App() {
               <Route
                 key={route.path}
                 path={route.path}
-                element={<route.component filters={filters} searchInput={searchInput} setIsLogged={setIsLogged} />}
+                element={<route.component filters={filters} sorts={sorts} searchInput={searchInput} setIsLogged={setIsLogged} />}
               />
             )}
           </Routes>

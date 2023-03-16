@@ -20,7 +20,7 @@ function CreateBook() {
   const [ selectedAuthors, setSelectedAuthors ] = useState<AuthorResponse[]>([])
   const [ isAuthorsChanged, setIsAuthorsChanged ] = useState(false)
   const [ cover, setCover ] = useState(noCover)
-  const [ show, setShow ] = useState(false)
+  const [ showModal, setShowModal ] = useState(false)
   const [ titleErrorMessage, setTitleErrorMessage ] = useState ('')
   const [ ISBNErrorMessage, setISBNErrorMessage ] = useState ('')
   const [ quantityErrorMessage, setQuantityErrorMessage ] = useState ('')
@@ -141,8 +141,8 @@ function CreateBook() {
                 getOptionValue={(option: AuthorResponse) => option.Id.toString()}
                 onChange={handleSelectedAuthorsChange}
               />
-              <button className='add-btn' onClick={() => setShow((s) => !s)}><AddIcon className = "icon" size={40} color="#fce4db" /></button>
-              { show && <CreateAuthor setIsAuthorsChanged={setIsAuthorsChanged} closeModal={() => setShow(false)}/>}
+              <button className='add-btn' onClick={() => setShowModal((s) => !s)}><AddIcon className = "icon" size={40} color="#fce4db" /></button>
+              { showModal && <CreateAuthor setIsAuthorsChanged={setIsAuthorsChanged} closeModal={() => setShowModal(false)}/>}
             </div>
           </div>
           <div className='section'>

@@ -4,7 +4,7 @@ import WhereObject from '../../interfaces/WhereObject';
 import './Filter.css';
 
 interface Props {
-    closeModal: () => void;
+    closeFilterModal: () => void;
     setFilters : React.Dispatch<React.SetStateAction<WhereObject[]>>
   }
 
@@ -19,16 +19,16 @@ function Filter(props: Props) {
     whereObjects.push(whereObjectFirstname)
     whereObjects.push(whereObjectLastname)
     props.setFilters(whereObjects)
-    props.closeModal()
+    props.closeFilterModal()
   }
 
   return(
     <div className="modal">
-      <div className="overlay" onClick={props.closeModal}/>
+      <div className="overlay" onClick={props.closeFilterModal}/>
       <div className="content">
         <h2>Filters</h2>
         <label>Author first name</label>
-        <input className='form-input' type="text"
+        <input className='form-input' type="text" value={authorFirstName}
           onChange={(e) => setAuthorFirstName(e.target.value)}
         />
         <label>Author last name</label>
@@ -37,7 +37,7 @@ function Filter(props: Props) {
         />
         <div className="filter-buttons">
           <button onClick={applyFilter}>Apply</button>
-          <button className='cancel-button' onClick={props.closeModal}>Cancel</button>
+          <button className='cancel-button' onClick={props.closeFilterModal}>Cancel</button>
         </div>
       </div>
     </div>
