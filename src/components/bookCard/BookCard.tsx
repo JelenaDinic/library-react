@@ -43,8 +43,11 @@ function BookCard({ book }: Props) {
         {
           isAdmin ?
             <>
-              <button className='detail-button'><EditIcon onClick={() => setShowEditModal((show) => !show)} size={30}/></button>
-              { showEditModal && <EditBook closeEditModal={() => setShowEditModal(false)} bookId={book.Id}/>}
+              <button className='detail-button'>
+                <EditIcon onClick={() => setShowEditModal((show) => !show)} size={30}/>
+              </button>
+              { showEditModal &&
+              <EditBook closeEditModal={() => setShowEditModal(false)} bookId={book.Id}/>}
               <button className='delete-button'><DeleteIcon size={30} /></button>
             </>
             :

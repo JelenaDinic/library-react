@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 
 import AuthorRequest from '../../interfaces/AuthorRequest';
-import { create } from '../../services/author.service';
+import authorService from '../../services/author.service';
 import './CreateAuthor.css';
 
 interface Props {
@@ -15,7 +15,7 @@ function CreateAuthor(props: Props) {
 
   const createAuthor = () => {
     if(validateInput()) {
-      create(author).then(() => {
+      authorService.createAuthor(author).then(() => {
         props.closeModal()
         props.setIsAuthorsChanged(true)
       })
