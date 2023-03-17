@@ -16,16 +16,16 @@ const initialPageLenght  = 12
 interface Props {
   searchInput : string
   filters : WhereObject[]
-  sorts: string[]
+  sorting: string[]
 }
 
-function HomePage( { searchInput, filters, sorts } : Props) {
+function HomePage( { searchInput, filters, sorting } : Props) {
   const [ bookList, setBookList ] = useState<BookItem[]>([])
   const [ pageNumber, setPageNumber ] = useState(1)
   const [ hasMore, setHasMore ] = useState(false)
   const [ currentSearch, setCurrentSearch ] = useState<string>(searchInput)
   const [ currentFilters, setCurrentFilters ] = useState<WhereObject[]>(filters)
-  const [ currentSorts, setCurrentSorts ] = useState<string[]>(sorts)
+  const [ currentSorts, setCurrentSorts ] = useState<string[]>(sorting)
 
 
   const addNextPage = () => {
@@ -37,7 +37,7 @@ function HomePage( { searchInput, filters, sorts } : Props) {
       PageNumber: pageNumber,
       PageLength: initialPageLenght,
       Where: [ ...filters, ...[ { Field: 'Title', Value: searchInput, Operation: 2 } ] ],
-      Order: sorts
+      Order: sorting
     }
     bookService.getBooksPaged(booksRequest).then((response:AxiosResponse<BookResponse>) =>
     {
@@ -57,13 +57,13 @@ function HomePage( { searchInput, filters, sorts } : Props) {
       setPageNumber(1)
       setCurrentFilters(filters)
     }
-    if (currentSorts !== sorts) {
+    if (currentSorts !== sorting) {
       setBookList([])
       setPageNumber(1)
-      setCurrentSorts(sorts)
+      setCurrentSorts(sorting)
     }
     fetchBooks()
-  }, [ pageNumber, searchInput, filters, sorts ])
+  }, [ pageNumber, searchInput, filters, sorting ])
 
 
   return (

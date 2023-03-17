@@ -1,0 +1,9 @@
+.modal {
+    overflow-y: scroll;
+}
+.content {
+    margin-top: 150px;
+}
+.overlay {
+    height: 1200px;
+}

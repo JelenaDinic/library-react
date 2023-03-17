@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import jwtDecode from 'jwt-decode'
-import { BiDetail as DetailIcon } from 'react-icons/bi'
+import { BiDetail as DetailIcon, BiEditAlt as EditIcon } from 'react-icons/bi'
 import { BsBookmarkCheck as RentIcon } from 'react-icons/bs'
 import { RiDeleteBin6Line as DeleteIcon } from 'react-icons/ri'
 
@@ -10,6 +10,7 @@ import BookItem from '../../interfaces/BookItem'
 import { Jwt, roleKey } from '../../interfaces/Jwt'
 import { getToken } from '../../services/token.service'
 import { isUserAdmin } from '../../utilities/roles'
+import EditBook from '../editBook/EditBook'
 import './BookCard.css'
 
 
@@ -20,6 +21,7 @@ interface Props {
 
 function BookCard({ book }: Props) {
   const [ isAdmin, setIsAdmin ]  = useState(false)
+  const [ showEditModal, setShowEditModal ] = useState(false)
 
   useEffect(() => {
     const token = getToken()
@@ -40,7 +42,15 @@ function BookCard({ book }: Props) {
         <button className='detail-button'><DetailIcon size={30} /></button>
         {
           isAdmin ?
-            <button className='delete-button'><DeleteIcon size={30} /></button> :
+            <>
+              <button className='detail-button'>
+                <EditIcon onClick={() => setShowEditModal((show) => !show)} size={30}/>
+              </button>
+              { showEditModal &&
+              <EditBook closeEditModal={() => setShowEditModal(false)} bookId={book.Id}/>}
+              <button className='delete-button'><DeleteIcon size={30} /></button>
+            </>
+            :
             <button className='detail-button'><RentIcon size={30}/></button>
         }
 

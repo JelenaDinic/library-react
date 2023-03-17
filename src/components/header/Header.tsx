@@ -8,16 +8,16 @@ import { useNavigate } from 'react-router-dom'
 
 import WhereObject from '../../interfaces/WhereObject'
 import Filter from '../filter/Filter'
-import Sort from '../sort/Sort'
+import Sorting from '../sorting/Sorting'
 
 interface Props {
   isLogged : boolean
   setSearchInput : React.Dispatch<React.SetStateAction<string>>
   setFilters: React.Dispatch<React.SetStateAction<WhereObject[]>>
-  setSorts: React.Dispatch<React.SetStateAction<string[]>>
+  setSorting: React.Dispatch<React.SetStateAction<string[]>>
 }
 
-function Header({ isLogged, setSearchInput, setFilters, setSorts } : Props) {
+function Header({ isLogged, setSearchInput, setFilters, setSorting } : Props) {
   const [ showFilterModal, setShowFilterModal ] = useState(false)
   const [ showSortModal, setShowSortModal ] = useState(false)
   const navigate = useNavigate()
@@ -41,10 +41,10 @@ function Header({ isLogged, setSearchInput, setFilters, setSorts } : Props) {
             <input className = "search" placeholder="Search books"
               onChange={debouncedChangeHandler}
             />
-            <FilterIcon onClick={() => setShowFilterModal((s) => !s)} className = "header-icon" color='#fce4db' size={30}/>
+            <FilterIcon onClick={() => setShowFilterModal((show) => !show)} className = "header-icon" color='#fce4db' size={30}/>
             { showFilterModal && <Filter setFilters={setFilters} closeFilterModal={() => setShowFilterModal(false)}/>}
-            <SortIcon onClick={() => setShowSortModal((s) => !s)} className = "header-icon" color='#fce4db' size={30}/>
-            { showSortModal && <Sort setSorts={setSorts} closeSortModal={() => setShowSortModal(false)}/>}
+            <SortIcon onClick={() => setShowSortModal((show) => !show)} className = "header-icon" color='#fce4db' size={30}/>
+            { showSortModal && <Sorting setSorting={setSorting} closeSortModal={() => setShowSortModal(false)}/>}
           </div> :
           <div className='sign-buttons'>
             <button name = "sign-in" onClick={ () => navigate('/Login')}>Sign In</button>

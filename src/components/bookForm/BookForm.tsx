@@ -8,14 +8,20 @@ import Select, { MultiValue } from 'react-select'
 import noCover from '../../assets/no-cover.png'
 import AuthorResponse from '../../interfaces/AuthorResponse'
 import Book from '../../interfaces/Book'
-import { getAuthors } from '../../services/author.service'
+import SingleBookRequest from '../../interfaces/SingleBookRequest'
+import authorService from '../../services/author.service'
 import bookService from '../../services/book.service'
 import CreateAuthor from '../createAuthor/CreateAuthor'
-import './CreateBook.css'
+import './BookForm.css'
 
 const initialBook: Book = { Title: '', ISBN: '', Quantity: 0, AuthorsIds: [], Description: '', PublishDate: '' }
+const initialUpdatedBook: SingleBookRequest = { Id: 0, Title: '', ISBN: '', Quantity: 0, Description: '', PublishDate: '' }
 
-function CreateBook() {
+interface Props {
+  bookId?: number
+}
+
+function BookForm({ bookId } : Props) {
   const [ authorList, setAuthorList ] = useState<AuthorResponse[]>([])
   const [ selectedAuthors, setSelectedAuthors ] = useState<AuthorResponse[]>([])
   const [ isAuthorsChanged, setIsAuthorsChanged ] = useState(false)
@@ -26,14 +32,48 @@ function CreateBook() {
   const [ quantityErrorMessage, setQuantityErrorMessage ] = useState ('')
   const [ requestCover, setRequestCover ] = useState<Blob>(new Blob)
   const [ book, setBook ] = useState<Book>(initialBook)
+  const [ updatedBook, setUpdatedBook ] = useState<SingleBookRequest>(initialUpdatedBook)
   const navigate = useNavigate()
 
   useEffect(() => {
+    if (bookId) {
+      bookService.getBookById(bookId).then((response) => {
+        setUpdatedBook({
+          Id: bookId,
+          Title: response.data?.Title,
+          ISBN: response.data?.ISBN,
+          Quantity: response.data?.Quantity,
+          Description: response.data?.Description,
+          Cover: response.data.Cover,
+          PublishDate: response.data?.PublishDate?.toString(),
+          AuthorIds: response.data.Authors?.map((author) => author.Id)
+        })
+        setBook({
+          Title: response.data?.Title,
+          ISBN: response.data?.ISBN,
+          Quantity: response.data?.Quantity,
+          Description: response.data?.Description,
+          PublishDate: response.data?.PublishDate?.toString(),
+          AuthorsIds: response.data.Authors?.map((author) => author.Id)
+        })
+        const selectedAuthors : AuthorResponse[] = []
+        response.data.Authors.forEach(author =>
+          selectedAuthors.push({
+            Id: author.Id,
+            FirstName: author.Firstname,
+            LastName: author.Lastname
+          }))
+        setSelectedAuthors(selectedAuthors)
+        if(response.data.Cover) {
+          setCover('data:image/png;base64,' + response.data.Cover)
+        }
+      }).catch(error => alert(error))
+    }
     fetchAuthors()
   }, [ isAuthorsChanged ])
 
   const fetchAuthors = () => {
-    getAuthors().then(response => {
+    authorService.getAuthors().then(response => {
       setAuthorList(response.data)
     }).catch(error => {console.error(error)})
   }
@@ -55,13 +95,43 @@ function CreateBook() {
   const handleSelectedAuthorsChange = (authorsData: MultiValue<AuthorResponse>) => {
     setSelectedAuthors(authorsData as AuthorResponse[])
   }
+  const handleBookFormSubmit = () => {
+    (bookId)  ? updateBook() : createBook()
+  }
+
+  const updateBook = () => {
+    if(validateInput()) {
+      bookService.updateBook(prepareUpdateFormData())
+        .then(() => {
+          navigate('/Books')
+        })
+        .catch(error => {console.error(error)})
+    }
+  }
 
   const createBook = () => {
     if(validateInput()) {
-      bookService.create(prepareFormData())
-        .then(() => {navigate('/Books')})
+      bookService.createBook(prepareFormData())
+        .then(() => {
+          navigate('/Books')
+        })
         .catch(error => {console.error(error)})
     }
+  }
+
+  const prepareUpdateFormData = () : FormData => {
+    const formData = new FormData()
+    if(updatedBook) {
+      formData.append('Id', updatedBook.Id.toString())
+      formData.append('Title', updatedBook.Title)
+      formData.append('Cover', requestCover)
+      formData.append('Description', updatedBook.Description)
+      formData.append('Quantity', updatedBook.Quantity.toString())
+      formData.append('ISBN', updatedBook.ISBN)
+      formData.append('PublishDate', new Intl.DateTimeFormat('en-US').format(new Date(updatedBook.PublishDate)))
+      selectedAuthors.forEach(author => formData.append('AuthorIds', author.Id.toString()))
+    }
+    return formData
   }
 
   const prepareFormData = () : FormData => {
@@ -101,29 +171,39 @@ function CreateBook() {
       <div className='all-inputs'>
         <div className='cover-section'>
           <div  className='section'>
-            <img className= "cover" src={cover}/>
+            <img className="cover" src={cover}/>
             <input type="file" onChange={(event) => handleImageChange(event)}/>
           </div>
         </div>
         <div className='forms-sections'>
           <div  className='section'>
             <label className="name-label" >Title</label>
-            <input className = "form-input" type="text"
-              onChange={(e) => setBook(prevState => ({ ...prevState, Title: e.target.value }))}
+            <input className="form-input" type="text" value={book.Title}
+              onChange={(e) => {
+                setBook(prevState => ({ ...prevState, Title: e.target.value }))
+                setUpdatedBook(prevState => ({ ...prevState, Title: e.target.value }))
+              }}
             />
             <label className='error-message'>{titleErrorMessage}</label>
           </div>
           <div className='section'>
             <label className="isbn-label" >ISBN</label>
-            <input className = "form-input" type="text"
-              onChange={(e) => setBook(prevState => ({ ...prevState, ISBN: e.target.value }))}
+            <input className="form-input" type="text" value={book.ISBN}
+              onChange={(e) => {
+                setBook(prevState => ({ ...prevState, ISBN: e.target.value }))
+                setUpdatedBook(prevState => ({ ...prevState, ISBN: e.target.value }))
+              }}
             />
             <label className='error-message'>{ISBNErrorMessage}</label>
           </div>
           <div  className='section'>
             <label className="desc-label" >Description</label>
-            <textarea className = "form-input" rows={3}
-              onChange={(e) => setBook(prevState => ({ ...prevState, Description: e.target.value }))}
+            <textarea className="form-input" rows={3} value={book.Description}
+              onChange={(e) => {
+                setBook(prevState => ({ ...prevState, Description: e.target.value }))
+                setUpdatedBook(prevState => ({ ...prevState, Description: e.target.value }))
+
+              }}
             />
           </div>
           <div  className='section' >
@@ -141,28 +221,40 @@ function CreateBook() {
                 getOptionValue={(option: AuthorResponse) => option.Id.toString()}
                 onChange={handleSelectedAuthorsChange}
               />
-              <button className='add-btn' onClick={() => setShowModal((s) => !s)}><AddIcon className = "icon" size={40} color="#fce4db" /></button>
+              <button className='add-btn'
+                onClick={() => setShowModal((show) => !show)}
+              >
+                <AddIcon className = "icon" size={40} color="#fce4db" />
+              </button>
               { showModal && <CreateAuthor setIsAuthorsChanged={setIsAuthorsChanged} closeModal={() => setShowModal(false)}/>}
             </div>
           </div>
           <div className='section'>
             <label className="date-label" >Publish date</label>
-            <input className = "form-input" type="date"
-              onChange={(e) => setBook(prevState => ({ ...prevState, PublishDate: e.target.value }))}
+            <input className ="form-input"
+              type="date"
+              value={book.PublishDate ? new Intl.DateTimeFormat('en-CA').format(new Date(book.PublishDate)) : ''}
+              onChange={(e) => {
+                setBook(prevState => ({ ...prevState, PublishDate: e.target.value }))
+                setUpdatedBook(prevState => ({ ...prevState, PublishDate: e.target.value }))
+              }}
             />
           </div>
           <div  className='section'>
             <label className="quantity-label" >Quantity</label>
-            <input className = "form-input" type="number" min={0}
-              onChange={(e) => setBook(prevState => ({ ...prevState, Quantity: parseInt(e.target.value) }))}
+            <input className="form-input" type="number" min={0} value={book.Quantity}
+              onChange={(e) => {
+                setBook(prevState => ({ ...prevState, Quantity: parseInt(e.target.value) }))
+                setUpdatedBook(prevState => ({ ...prevState, Quantity: parseInt(e.target.value) }))
+              }}
             />
             <label className='error-message'>{quantityErrorMessage}</label>
           </div>
         </div>
 
       </div>
-      <button onClick={createBook}>Create</button>
+      <button onClick={handleBookFormSubmit}>{bookId ? 'Update' : 'Create'}</button>
     </div>
   )
 }
-export default CreateBook
+export default BookForm
