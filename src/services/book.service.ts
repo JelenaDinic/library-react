@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios'
 
 import BookResponse from '../interfaces/BookResponse'
 import BooksRequest from '../interfaces/BooksRequest'
+import SingleBookResponse from '../interfaces/SingleBookResponse'
 import { baseAxios } from './api.service'
 
 const paramsToUrl = (booksRequest: BooksRequest) => {
@@ -21,9 +22,13 @@ const paramsToUrl = (booksRequest: BooksRequest) => {
 }
 
 const create = (formData: FormData)  => baseAxios.post('/Books', formData)
+const update = (formData: FormData)  => baseAxios.put('/Books', formData)
 const getBooksPaged = (booksRequest : BooksRequest) : Promise<AxiosResponse<BookResponse>>  => baseAxios.get<BookResponse>('/Books/paged' + paramsToUrl(booksRequest))
+const getById = ( bookId: number) => baseAxios.get<SingleBookResponse>('/Books/' + bookId.toString())
 
 export default {
   create,
-  getBooksPaged
+  update,
+  getBooksPaged,
+  getById
 }

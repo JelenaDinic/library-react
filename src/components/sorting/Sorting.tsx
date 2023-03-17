@@ -2,14 +2,14 @@ import { useState } from 'react';
 
 import Select, { MultiValue } from 'react-select';
 
-import './Sort.css';
+import './Sorting.css';
 
 interface Props {
     closeSortModal: () => void;
-    setSorts : React.Dispatch<React.SetStateAction<string[]>>
+    setSorting : React.Dispatch<React.SetStateAction<string[]>>
   }
 
-  interface SortOption {
+interface SortOption {
     label: string,
     value: string
   }
@@ -23,11 +23,11 @@ const sortOptions : SortOption[] = [
   { label: 'ISBN Descending', value: 'Isbn DESC' }
 ]
 
-function Sort(props: Props) {
+function Sorting(props: Props) {
   const [ selectedSorts, setSelectedSorts ] = useState<SortOption[]>([])
 
   const applySort = () => {
-    props.setSorts(selectedSorts.map((sort) => sort.value))
+    props.setSorting(selectedSorts.map((sort) => sort.value))
     props.closeSortModal()
   }
 
@@ -63,4 +63,4 @@ function Sort(props: Props) {
   )
 }
 
-export default  Sort
+export default  Sorting

@@ -1,4 +1,4 @@
-import CreateBook from './components/createBook/CreateBook'
+import BookForm from './components/createBook/BookForm'
 import HomePage from './components/homePage/HomePage'
 import Login from './components/login/Login'
 import Profile from './components/profile/Profile'
@@ -7,7 +7,7 @@ const routes = [
   { path: '/', component: HomePage },
   { path: '/Login', component: Login },
   { path: '/Profile', component: Profile },
-  { path: '/CreateBook', component: CreateBook },
+  { path: '/CreateBook', component: BookForm },
   { path: '*', component: HomePage }
 ]
 
