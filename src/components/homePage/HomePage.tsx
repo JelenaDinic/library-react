@@ -68,7 +68,7 @@ function HomePage( { searchInput, filters, sorting } : Props) {
 
   return (
     <div className="home">
-      <h1 className='available-title'>Available book</h1>
+      <h1 className='available-title'>Available books</h1>
       <InfiniteScroll
         dataLength={bookList.length}
         next={addNextPage}

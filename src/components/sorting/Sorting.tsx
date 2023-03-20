@@ -5,14 +5,14 @@ import Select, { MultiValue } from 'react-select';
 import './Sorting.css';
 
 interface Props {
-    closeSortModal: () => void;
-    setSorting : React.Dispatch<React.SetStateAction<string[]>>
-  }
+  closeSortModal: () => void;
+  setSorting : React.Dispatch<React.SetStateAction<string[]>>
+}
 
 interface SortOption {
-    label: string,
-    value: string
-  }
+  label: string,
+  value: string
+}
 
 const sortOptions : SortOption[] = [
   { label: 'Title Ascending', value: 'Title ASC' },

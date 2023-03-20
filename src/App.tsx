@@ -33,7 +33,7 @@ function App() {
               <Route
                 key={route.path}
                 path={route.path}
-                element={<route.component filters={filters} sorting={sorting} searchInput={searchInput} setIsLogged={setIsLogged} />}
+                element={<route.component closeEditModal={() => {null}} filters={filters} sorting={sorting} searchInput={searchInput} setIsLogged={setIsLogged} />}
               />
             )}
           </Routes>

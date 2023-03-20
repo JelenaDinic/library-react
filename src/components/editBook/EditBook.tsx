@@ -14,7 +14,7 @@ function EditBook( { bookId, closeEditModal } : Props) {
       <div className="overlay" onClick={closeEditModal}/>
       <div className="content">
         <h2>Edit book</h2>
-        <BookForm bookId={bookId} />
+        <BookForm bookId={bookId} closeEditModal={closeEditModal}/>
       </div>
     </div>
   )

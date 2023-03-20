@@ -2,7 +2,6 @@ import './Menu.css'
 
 import { BiLogOut as LogoutIcon } from 'react-icons/bi'
 import { BsThreeDots as MoreIcon } from 'react-icons/bs'
-import { CgProfile as ProfileIcon } from 'react-icons/cg'
 import { GiBookshelf as BooksIcon } from 'react-icons/gi'
 import { NavLink } from 'react-router-dom'
 
@@ -22,8 +21,7 @@ function Menu( props  : Props) {
   return (
     <div className='menu'>
       <div className='menu-content'>
-        <NavLink to="/Profile" ><ProfileIcon size={25} color="#fce4db"/></NavLink>
-        <NavLink to="/Home" ><BooksIcon size={25} color="#fce4db"/></NavLink>
+        <NavLink to="/Books" ><BooksIcon size={25} color="#fce4db"/></NavLink>
         {props.isLogged && <NavLink onClick={() => { logout() } } to='/Login' ><LogoutIcon size={25} color="#fce4db" /></NavLink>}
         <MoreIcon size={25} color="#fce4db"/>
       </div>

@@ -1,4 +1,4 @@
-export default interface AuthorResponse {
+export default interface Author{
     Id : number;
     Firstname: string;
     Lastname: string;

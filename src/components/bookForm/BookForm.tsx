@@ -1,4 +1,3 @@
-
 import { ChangeEvent, useEffect, useState } from 'react'
 
 import { MdAddCircleOutline as AddIcon } from 'react-icons/md'
@@ -19,9 +18,10 @@ const initialUpdatedBook: SingleBookRequest = { Id: 0, Title: '', ISBN: '', Quan
 
 interface Props {
   bookId?: number
+  closeEditModal: () => void;
 }
 
-function BookForm({ bookId } : Props) {
+function BookForm({ bookId, closeEditModal } : Props) {
   const [ authorList, setAuthorList ] = useState<AuthorResponse[]>([])
   const [ selectedAuthors, setSelectedAuthors ] = useState<AuthorResponse[]>([])
   const [ isAuthorsChanged, setIsAuthorsChanged ] = useState(false)
@@ -35,7 +35,19 @@ function BookForm({ bookId } : Props) {
   const [ updatedBook, setUpdatedBook ] = useState<SingleBookRequest>(initialUpdatedBook)
   const navigate = useNavigate()
 
+  const convertBase64ToBlob = (base64Image: string): Blob => {
+    const parts = base64Image.split(';base64,')
+    const imageType = parts[0].split(':')[1]
+    const decodedData = window.atob(parts[1])
+    const uInt8Array = new Uint8Array(decodedData.length)
+    for (let i = 0; i < decodedData.length; ++i) {
+      uInt8Array[i] = decodedData.charCodeAt(i)
+    }
+    return new Blob([ uInt8Array ], { type: imageType })
+  }
+
   useEffect(() => {
+    console.log(bookId)
     if (bookId) {
       bookService.getBookById(bookId).then((response) => {
         setUpdatedBook({
@@ -66,6 +78,7 @@ function BookForm({ bookId } : Props) {
         setSelectedAuthors(selectedAuthors)
         if(response.data.Cover) {
           setCover('data:image/png;base64,' + response.data.Cover)
+          setRequestCover(convertBase64ToBlob('data:image/png;base64,' + response.data.Cover))
         }
       }).catch(error => alert(error))
     }
@@ -103,7 +116,8 @@ function BookForm({ bookId } : Props) {
     if(validateInput()) {
       bookService.updateBook(prepareUpdateFormData())
         .then(() => {
-          navigate('/Books')
+          closeEditModal()
+          window.location.reload()
         })
         .catch(error => {console.error(error)})
     }
@@ -114,6 +128,7 @@ function BookForm({ bookId } : Props) {
       bookService.createBook(prepareFormData())
         .then(() => {
           navigate('/Books')
+          window.location.reload()
         })
         .catch(error => {console.error(error)})
     }
