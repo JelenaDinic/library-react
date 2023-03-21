@@ -4,15 +4,21 @@ import { BiEditAlt as EditIcon } from 'react-icons/bi'
 import { BsBookmarkCheck as RentIcon } from 'react-icons/bs'
 import { RiDeleteBin6Line as DeleteIcon } from 'react-icons/ri'
 import { useParams } from 'react-router-dom'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 
 import noCover from '../../assets/no-cover.png'
+import BookHistoryResponse from '../../interfaces/BookHistoryResponse'
 import { UserRole } from '../../interfaces/Jwt'
 import SingleBookResponse from '../../interfaces/SingleBookResponse'
 import bookService from '../../services/book.service'
+import rentalService from '../../services/rental.service'
 import { isAdmin, isLibrarian } from '../../utilities/roles'
 import DeleteBook from '../deleteBook/DeleteBook'
 import EditBook from '../editBook/EditBook'
+
+import './BookDetail.css'
 
 interface Props {
   userRole?: UserRole
@@ -23,10 +29,12 @@ function BookDetail({ userRole }: Props) {
   const [ showEditModal, setShowEditModal ] = useState(false)
   const [ showDeleteDialog, setShowDeleteDialog ] = useState(false)
   const [ book, setBook ] = useState<SingleBookResponse | null>(null)
+  const [ bookHistory, setBookHistory ] = useState<BookHistoryResponse[]>([])
   const deleteDialogRef = createRef<HTMLDialogElement>()
   const params= useParams()
 
   useEffect(() => {
+    fetchBookHistory()
     if (params.bookId) {
       bookService.getBookById(parseInt(params.bookId)).then((response) => {
         setBook(response.data)
@@ -40,16 +48,53 @@ function BookDetail({ userRole }: Props) {
       deleteDialogRef.current?.close()
   }, [ showDeleteDialog ])
 
+  const fetchBookHistory = () => {
+    params.bookId && rentalService.getBookHistory(parseInt(params.bookId)).then(response => {
+      setBookHistory(response.data)
+    }).catch(error => console.error(error))
+  }
+
+  const rentBook = () => {
+    params.bookId &&
+    rentalService.rentBook(parseInt(params.bookId)).then(() => {
+      toast.success('Successfully rented')
+      fetchBookHistory()
+    }).catch((error) => {
+      toast.error('An error occured.')
+    })
+  }
+
+  const returnBook = ( rentId : number) => {
+    params.bookId &&
+    rentalService.returnBook(rentId).then(() => {
+      toast.success('Successfully returned')
+      setBookHistory((previousState) =>  [ ...previousState.map(element => element.Id === rentId
+        ? { ...element, IsReturned: true }
+        : element
+      ) ])
+    }).catch((error) => {
+      toast.error('An error occured.')
+    })
+  }
+
 
   return (
     <div className="single-card">
+      <ToastContainer />
       {book ?
         <>
           <div className='all-inputs'>
-            <div className='cover-section'>
-              <div  className='section'>
-                <img className="cover" src={cover}/>
-              </div>
+            <div className='detail-cover-section'>
+              <img className="cover" src={cover}/>
+              { book.Available > 0 ?
+                <div className='available'>
+                  <label>AVAILABLE</label>
+                </div> :
+                <div className='not-available'>
+                  <label>NOT AVAILABLE</label>
+                </div>
+              }
+
             </div>
             <div className='forms-sections'>
               <div  className='section'>
@@ -74,11 +119,7 @@ function BookDetail({ userRole }: Props) {
               </div>
               <div className='section'>
                 <label className="date-label" >Publish date</label>
-                <label>{book.PublishDate.toString()}</label>
-              </div>
-              <div  className='section'>
-                <label className="quantity-label" >Quantity</label>
-                <label>{book.Quantity}</label>
+                <label>{book.PublishDate ? new Intl.DateTimeFormat('en-CA').format(new Date(book.PublishDate)) : '/' }</label>
               </div>
             </div>
 
@@ -98,13 +139,55 @@ function BookDetail({ userRole }: Props) {
                   <DeleteBook book = {book} deleteDialogRef={deleteDialogRef}
                     setShowDeleteDialog={setShowDeleteDialog}
                   />
+                  {(book.Available > 0) && <button className='detail-button' onClick={rentBook}><RentIcon size={30}/></button>}
                 </>
                 :
-                <button className='detail-button'><RentIcon size={30}/></button>
+                (book.Available > 0) && <button className='detail-button' onClick={rentBook}><RentIcon size={30}/></button>
             }
 
           </div>
         </> : <label> There is no book with id = {params.bookId}</label>
+      }
+      {
+        bookHistory.length > 0 &&
+        <>
+          <table className='history-table'>
+            <thead className='history-headers'>
+              <tr className='headers'>
+                <th className='history-header' scope='col'>Rent date</th>
+                <th className='history-header' scope='col'>User</th>
+                <th className='history-header' scope='col'>Returned?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                bookHistory.map((bookRentHistory) => {
+                  return (
+                    <tr key={bookRentHistory.Id}>
+                      <td className='cell-data'>
+                        {bookRentHistory.RentDate}
+                      </td>
+                      <td className='cell-data'>
+                        {bookRentHistory.User.Email}
+                      </td>
+                      {
+                        bookRentHistory.IsReturned ?
+                          <td className='dell-data'>
+                            Returned
+                          </td> :
+                          (
+                            <td className='cell-data'>
+                              <button onClick={() => returnBook(bookRentHistory.Id)}>Return</button>
+                            </td>
+                          )
+                      }
+                    </tr>
+                  )
+                })
+              }
+            </tbody>
+          </table>
+        </>
       }
     </div>
   )

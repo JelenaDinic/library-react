@@ -3,6 +3,8 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { MdAddCircleOutline as AddIcon } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import Select, { MultiValue } from 'react-select'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 import noCover from '../../assets/no-cover.png'
 import AuthorResponse from '../../interfaces/AuthorResponse'
@@ -129,8 +131,8 @@ function BookForm({ bookId, closeEditModal, onModifyFinished } : Props) {
     if(validateInput()) {
       bookService.createBook(prepareFormData())
         .then(() => {
-          navigate('/')
           onModifyFinished && onModifyFinished()
+          navigate('/')
         })
         .catch(error => {console.error(error)})
     }
@@ -185,6 +187,7 @@ function BookForm({ bookId, closeEditModal, onModifyFinished } : Props) {
 
   return (
     <div className="single-card">
+      <ToastContainer />
       <div className='all-inputs'>
         <div className='cover-section'>
           <div  className='section'>

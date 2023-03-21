@@ -1,7 +1,5 @@
 import { RefObject } from 'react'
 
-import { useNavigate } from 'react-router-dom'
-
 import BookItem from '../../interfaces/BookItem'
 import SingleBookResponse from '../../interfaces/SingleBookResponse'
 import bookService from '../../services/book.service'
@@ -16,13 +14,11 @@ interface Props {
 }
 
 function DeleteBook({ deleteDialogRef, setShowDeleteDialog, book, onModifyFinished }: Props) {
-  const navigate = useNavigate()
 
   const deleteBook = () => {
     bookService.deleteBook(book.Id).then(() => {
       setShowDeleteDialog(false)
       onModifyFinished && onModifyFinished()
-      navigate('/')
     }).catch(error => console.error(error))
   }
 

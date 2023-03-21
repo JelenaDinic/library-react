@@ -10,6 +10,7 @@ import Header from './components/header/Header'
 import HomePage from './components/homePage/HomePage'
 import Login from './components/login/Login'
 import Menu from './components/menu/Menu'
+import MostRentedPage from './components/mostRentedPage/MostRentedPage'
 import NavBar from './components/navBar/NavBar'
 import { Jwt, roleKey, UserRole } from './interfaces/Jwt'
 import WhereObject from './interfaces/WhereObject'
@@ -39,6 +40,7 @@ function App() {
         <div className='container'>
           <Routes>
             <Route element={<PrivateRoutes/>}>
+              <Route path='/popular' element={<MostRentedPage />}/>
               <Route path='/createBook' element={<BookForm
                 closeEditModal={() => {null}}
                 onModifyFinished={() => {null}}
