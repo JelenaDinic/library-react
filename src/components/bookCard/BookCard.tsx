@@ -9,7 +9,7 @@ import noCover from '../../assets/no-cover.png'
 import BookItem from '../../interfaces/BookItem'
 import { UserRole } from '../../interfaces/Jwt'
 import rentalService from '../../services/rental.service'
-import { isUserAdmin, isUserLibrarian } from '../../utilities/roles'
+import { isAdmin, isLibrarian } from '../../utilities/roles'
 import DeleteBook from '../deleteBook/DeleteBook'
 import EditBook from '../editBook/EditBook'
 import './BookCard.css'
@@ -53,7 +53,7 @@ function BookCard({ book, userRole, onModifyFinished }: Props) {
           <DetailIcon size={30} />
         </button>
         {
-          userRole && (isUserAdmin(userRole) || isUserLibrarian(userRole)) ?
+          userRole && (isAdmin(userRole) || isLibrarian(userRole)) ?
             <>
               <button className='detail-button'>
                 <EditIcon onClick={() => setShowEditModal((show) => !show)} size={30}/>

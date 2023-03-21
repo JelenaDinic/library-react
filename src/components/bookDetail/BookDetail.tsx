@@ -10,7 +10,7 @@ import noCover from '../../assets/no-cover.png'
 import { UserRole } from '../../interfaces/Jwt'
 import SingleBookResponse from '../../interfaces/SingleBookResponse'
 import bookService from '../../services/book.service'
-import { isUserAdmin, isUserLibrarian } from '../../utilities/roles'
+import { isAdmin, isLibrarian } from '../../utilities/roles'
 import DeleteBook from '../deleteBook/DeleteBook'
 import EditBook from '../editBook/EditBook'
 
@@ -85,7 +85,7 @@ function BookDetail({ userRole }: Props) {
           </div>
           <div className='card-buttons'>
             {
-              userRole && (isUserAdmin(userRole) || isUserLibrarian(userRole)) ?
+              userRole && (isAdmin(userRole) || isLibrarian(userRole)) ?
                 <>
                   <button className='detail-button'>
                     <EditIcon onClick={() => setShowEditModal((show) => !show)} size={30}/>

@@ -20,9 +20,9 @@ function DeleteBook({ deleteDialogRef, setShowDeleteDialog, book, onModifyFinish
 
   const deleteBook = () => {
     bookService.deleteBook(book.Id).then(() => {
-      navigate('/')
       setShowDeleteDialog(false)
       onModifyFinished && onModifyFinished()
+      navigate('/')
     }).catch(error => console.error(error))
   }
 

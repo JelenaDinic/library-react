@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom'
 
 import { UserRole } from '../../interfaces/Jwt'
 import { removeToken } from '../../services/token.service'
-import { isUserAdmin, isUserLibrarian } from '../../utilities/roles'
+import { isAdmin, isLibrarian } from '../../utilities/roles'
 
 interface Props {
   setIsLogged : React.Dispatch<React.SetStateAction<boolean>>
@@ -27,7 +27,7 @@ function Menu( { setIsLogged, isLogged, userRole }  : Props) {
         <NavLink to="/" ><BooksIcon size={25} color="#fce4db"/></NavLink>
 
         {isLogged &&
-        <> {(userRole && (isUserAdmin(userRole) || isUserLibrarian(userRole))) &&
+        <> {(userRole && (isAdmin(userRole) || isLibrarian(userRole))) &&
           <NavLink className = "navbar-icon" to="/createBook" >
             <AddIcon className = "icon" size={25} color="#fce4db" />
           </NavLink>
