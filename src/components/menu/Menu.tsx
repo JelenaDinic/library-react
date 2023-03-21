@@ -24,7 +24,7 @@ function Menu( { setIsLogged, isLogged, userRole }  : Props) {
   return (
     <div className='menu'>
       <div className='menu-content'>
-        <NavLink to="/Books" ><BooksIcon size={25} color="#fce4db"/></NavLink>
+        <NavLink to="/" ><BooksIcon size={25} color="#fce4db"/></NavLink>
 
         {isLogged &&
         <> {(userRole && (isUserAdmin(userRole) || isUserLibrarian(userRole))) &&

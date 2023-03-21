@@ -26,12 +26,12 @@ function NavBar({ setIsLogged, isLogged, userRole }  : Props) {
   return (
     <div className='navbar'>
       <div className='navbar-content'>
-        <NavLink className = "navbar-icon" to="/Books" ><HomeIcon className = "icon" size={50} color="#fce4db" /></NavLink>
-        <NavLink className = "navbar-icon" to="/Books" ><BooksIcon className = "icon" size={50} color="#fce4db" /></NavLink>
+        <NavLink className = "navbar-icon" to="/" ><HomeIcon className = "icon" size={50} color="#fce4db" /></NavLink>
+        <NavLink className = "navbar-icon" to="/" ><BooksIcon className = "icon" size={50} color="#fce4db" /></NavLink>
         {isLogged &&
         <>
           <NavLink className="navbar-icon-logout"
-            onClick={() => { logout() } } to='/Login'
+            onClick={() => { logout() } } to='/login'
           >
             <LogoutIcon className = "icon"size={50} color="#fce4db" />
           </NavLink>
