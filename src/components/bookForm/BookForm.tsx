@@ -19,9 +19,10 @@ const initialUpdatedBook: SingleBookRequest = { Id: 0, Title: '', ISBN: '', Quan
 interface Props {
   bookId?: number
   closeEditModal: () => void;
+  onModifyFinished?: () => void
 }
 
-function BookForm({ bookId, closeEditModal } : Props) {
+function BookForm({ bookId, closeEditModal, onModifyFinished } : Props) {
   const [ authorList, setAuthorList ] = useState<AuthorResponse[]>([])
   const [ selectedAuthors, setSelectedAuthors ] = useState<AuthorResponse[]>([])
   const [ isAuthorsChanged, setIsAuthorsChanged ] = useState(false)
@@ -46,42 +47,43 @@ function BookForm({ bookId, closeEditModal } : Props) {
     return new Blob([ uInt8Array ], { type: imageType })
   }
 
+  const mapBook = (bookId : number) => {
+    bookService.getBookById(bookId).then((response) => {
+      setUpdatedBook({
+        Id: bookId,
+        Title: response.data?.Title,
+        ISBN: response.data?.ISBN,
+        Quantity: response.data?.Quantity,
+        Description: response.data?.Description,
+        Cover: response.data.Cover,
+        PublishDate: response.data?.PublishDate?.toString(),
+        AuthorIds: response.data.Authors?.map((author) => author.Id)
+      })
+      setBook({
+        Title: response.data?.Title,
+        ISBN: response.data?.ISBN,
+        Quantity: response.data?.Quantity,
+        Description: response.data?.Description,
+        PublishDate: response.data?.PublishDate?.toString(),
+        AuthorsIds: response.data.Authors?.map((author) => author.Id)
+      })
+      const selectedAuthors : AuthorResponse[] = []
+      response.data.Authors.forEach(author =>
+        selectedAuthors.push({
+          Id: author.Id,
+          FirstName: author.Firstname,
+          LastName: author.Lastname
+        }))
+      setSelectedAuthors(selectedAuthors)
+      if(response.data.Cover) {
+        setCover('data:image/png;base64,' + response.data.Cover)
+        setRequestCover(convertBase64ToBlob('data:image/png;base64,' + response.data.Cover))
+      }
+    }).catch(error => alert(error))
+  }
+
   useEffect(() => {
-    console.log(bookId)
-    if (bookId) {
-      bookService.getBookById(bookId).then((response) => {
-        setUpdatedBook({
-          Id: bookId,
-          Title: response.data?.Title,
-          ISBN: response.data?.ISBN,
-          Quantity: response.data?.Quantity,
-          Description: response.data?.Description,
-          Cover: response.data.Cover,
-          PublishDate: response.data?.PublishDate?.toString(),
-          AuthorIds: response.data.Authors?.map((author) => author.Id)
-        })
-        setBook({
-          Title: response.data?.Title,
-          ISBN: response.data?.ISBN,
-          Quantity: response.data?.Quantity,
-          Description: response.data?.Description,
-          PublishDate: response.data?.PublishDate?.toString(),
-          AuthorsIds: response.data.Authors?.map((author) => author.Id)
-        })
-        const selectedAuthors : AuthorResponse[] = []
-        response.data.Authors.forEach(author =>
-          selectedAuthors.push({
-            Id: author.Id,
-            FirstName: author.Firstname,
-            LastName: author.Lastname
-          }))
-        setSelectedAuthors(selectedAuthors)
-        if(response.data.Cover) {
-          setCover('data:image/png;base64,' + response.data.Cover)
-          setRequestCover(convertBase64ToBlob('data:image/png;base64,' + response.data.Cover))
-        }
-      }).catch(error => alert(error))
-    }
+    bookId && mapBook(bookId)
     fetchAuthors()
   }, [ isAuthorsChanged ])
 
@@ -117,7 +119,7 @@ function BookForm({ bookId, closeEditModal } : Props) {
       bookService.updateBook(prepareUpdateFormData())
         .then(() => {
           closeEditModal()
-          window.location.reload()
+          onModifyFinished && onModifyFinished()
         })
         .catch(error => {console.error(error)})
     }
@@ -127,8 +129,8 @@ function BookForm({ bookId, closeEditModal } : Props) {
     if(validateInput()) {
       bookService.createBook(prepareFormData())
         .then(() => {
-          navigate('/Books')
-          window.location.reload()
+          navigate('/')
+          onModifyFinished && onModifyFinished()
         })
         .catch(error => {console.error(error)})
     }

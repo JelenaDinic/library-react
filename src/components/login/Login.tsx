@@ -1,19 +1,21 @@
 import { FormEvent, useState } from 'react'
 
 import axios, { AxiosError } from 'axios'
+import jwtDecode from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 
+import { Jwt, roleKey, UserRole } from '../../interfaces/Jwt'
 import LoginCredentials from '../../interfaces/LoginCredentials'
 import { getLogin } from '../../services/auth.service'
 import { setToken } from '../../services/token.service'
-
 import './Login.css'
 
 interface Props {
   setIsLogged : React.Dispatch<React.SetStateAction<boolean>>
+  setUserRole : React.Dispatch<React.SetStateAction<UserRole | undefined>>
 }
 
-function Login({ setIsLogged } : Props) {
+function Login({ setIsLogged, setUserRole  } : Props) {
   const [ user, setUser ] = useState<LoginCredentials>({ Email: '', Password: '' })
   const [ errorMessage, setErrorMessage ] = useState ('')
   const navigate = useNavigate()
@@ -27,6 +29,7 @@ function Login({ setIsLogged } : Props) {
     getLogin(request).then(response => {
       setToken(response.data.AccessToken)
       setIsLogged(true)
+      setUserRole(jwtDecode<Jwt>(response.data.AccessToken)[roleKey])
       navigate('/')
     }).catch((error: Error | AxiosError) => {
       if (axios.isAxiosError(error)) {

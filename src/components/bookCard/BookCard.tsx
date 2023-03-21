@@ -1,6 +1,5 @@
 import { createRef, useEffect, useState } from 'react'
 
-import jwtDecode from 'jwt-decode'
 import { BiDetail as DetailIcon, BiEditAlt as EditIcon } from 'react-icons/bi'
 import { BsBookmarkCheck as RentIcon } from 'react-icons/bs'
 import { RiDeleteBin6Line as DeleteIcon } from 'react-icons/ri'
@@ -8,33 +7,38 @@ import { useNavigate } from 'react-router-dom'
 
 import noCover from '../../assets/no-cover.png'
 import BookItem from '../../interfaces/BookItem'
-import { Jwt, roleKey } from '../../interfaces/Jwt'
-import { getToken } from '../../services/token.service'
-import { isUserAdmin } from '../../utilities/roles'
+import { UserRole } from '../../interfaces/Jwt'
+import rentalService from '../../services/rental.service'
+import { isUserAdmin, isUserLibrarian } from '../../utilities/roles'
 import DeleteBook from '../deleteBook/DeleteBook'
 import EditBook from '../editBook/EditBook'
 import './BookCard.css'
 
 interface Props {
-  book: BookItem
+  book: BookItem,
+  userRole?: UserRole
+  onModifyFinished: () => void
 }
 
-function BookCard({ book }: Props) {
-  const [ isAdmin, setIsAdmin ]  = useState(false)
+function BookCard({ book, userRole, onModifyFinished }: Props) {
   const [ showEditModal, setShowEditModal ] = useState(false)
-  const [ showDeleteModal, setShowDeleteModal ] = useState(false)
+  const [ showDeleteDialog, setShowDeleteDialog ] = useState(false)
   const deleteDialogRef = createRef<HTMLDialogElement>()
   const navigate = useNavigate()
 
   useEffect(() => {
-    const token = getToken()
-    if(token) {
-      setIsAdmin(isUserAdmin(jwtDecode<Jwt>(token)[roleKey]))
-    }
-    showDeleteModal ?
+    showDeleteDialog ?
       deleteDialogRef.current?.showModal() :
       deleteDialogRef.current?.close()
-  }, [ showDeleteModal ])
+  }, [ showDeleteDialog ])
+
+  const rentBook = () => {
+    rentalService.rentBook(book.Id).then(() => {
+      alert('Successfully rented')
+    }).catch(error => {
+      console.error(error)
+    })
+  }
 
   return (
     <div className="card">
@@ -45,26 +49,26 @@ function BookCard({ book }: Props) {
       </p>
       <label className="isbn-label" >ISBN : {book.Isbn} </label>
       <div className='card-buttons'>
-        <button className='detail-button' onClick={() => navigate('/BookDetail/' + book.Id.toString())}>
+        <button className='detail-button' onClick={() => navigate('/bookDetail/' + book.Id.toString())}>
           <DetailIcon size={30} />
         </button>
         {
-          isAdmin ?
+          userRole && (isUserAdmin(userRole) || isUserLibrarian(userRole)) ?
             <>
               <button className='detail-button'>
                 <EditIcon onClick={() => setShowEditModal((show) => !show)} size={30}/>
               </button>
               { showEditModal &&
-              <EditBook closeEditModal={() => setShowEditModal(false)} bookId={book.Id}/>}
+              <EditBook onModifyFinished = {onModifyFinished} closeEditModal={() => setShowEditModal(false)} bookId={book.Id}/>}
               <button className='delete-button'>
-                <DeleteIcon onClick={() => setShowDeleteModal(true)} size={30} />
+                <DeleteIcon onClick={() => setShowDeleteDialog(true)} size={30} />
               </button>
-              <DeleteBook bookId = {book.Id} deleteDialogRef={deleteDialogRef}
-                setShowDeleteDialog={setShowDeleteModal}
+              <DeleteBook onModifyFinished = {onModifyFinished} book = {book} deleteDialogRef={deleteDialogRef}
+                setShowDeleteDialog={setShowDeleteDialog}
               />
             </>
             :
-            <button className='detail-button'><RentIcon size={30}/></button>
+            <button className='detail-button' onClick={rentBook} ><RentIcon size={30}/></button>
         }
 
       </div>

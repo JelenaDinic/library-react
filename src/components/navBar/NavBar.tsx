@@ -6,18 +6,21 @@ import { ImHome as HomeIcon } from 'react-icons/im'
 import { MdAddCircleOutline as AddIcon } from 'react-icons/md'
 import { NavLink } from 'react-router-dom'
 
+import { UserRole } from '../../interfaces/Jwt'
 import { removeToken } from '../../services/token.service'
+import { isUserAdmin, isUserLibrarian } from '../../utilities/roles'
 
 interface Props {
   setIsLogged : React.Dispatch<React.SetStateAction<boolean>>
   isLogged : boolean
+  userRole?: UserRole
 }
 
-function NavBar(props  : Props) {
+function NavBar({ setIsLogged, isLogged, userRole }  : Props) {
 
   const logout = () => {
     removeToken()
-    props.setIsLogged(false)
+    setIsLogged(false)
   }
 
   return (
@@ -25,8 +28,20 @@ function NavBar(props  : Props) {
       <div className='navbar-content'>
         <NavLink className = "navbar-icon" to="/Books" ><HomeIcon className = "icon" size={50} color="#fce4db" /></NavLink>
         <NavLink className = "navbar-icon" to="/Books" ><BooksIcon className = "icon" size={50} color="#fce4db" /></NavLink>
-        <NavLink className = "navbar-icon" to="/CreateBook" ><AddIcon className = "icon" size={50} color="#fce4db" /></NavLink>
-        {props.isLogged && <NavLink className="navbar-icon-logout" onClick={() => { logout() } } to='/Login' ><LogoutIcon className = "icon"size={50} color="#fce4db" /></NavLink>}
+        {isLogged &&
+        <>
+          <NavLink className="navbar-icon-logout"
+            onClick={() => { logout() } } to='/Login'
+          >
+            <LogoutIcon className = "icon"size={50} color="#fce4db" />
+          </NavLink>
+          {(userRole && (isUserAdmin(userRole) || isUserLibrarian(userRole))) &&
+          <NavLink className = "navbar-icon" to="/createBook" >
+            <AddIcon className = "icon" size={50} color="#fce4db" />
+          </NavLink>
+          }
+
+        </>}
       </div>
     </div>
   )

@@ -1,7 +1,9 @@
-import { RefObject, useEffect, useState } from 'react'
+import { RefObject } from 'react'
 
 import { useNavigate } from 'react-router-dom'
 
+import BookItem from '../../interfaces/BookItem'
+import SingleBookResponse from '../../interfaces/SingleBookResponse'
 import bookService from '../../services/book.service'
 
 import './DeleteBook.css'
@@ -9,35 +11,24 @@ import './DeleteBook.css'
 interface Props {
   deleteDialogRef: RefObject<HTMLDialogElement>
   setShowDeleteDialog: React.Dispatch<React.SetStateAction<boolean>>
-  bookId: number
+  book: BookItem | SingleBookResponse
+  onModifyFinished?: () => void
 }
 
-
-
-function DeleteBook({ deleteDialogRef, setShowDeleteDialog, bookId }: Props) {
-  const [ title, setTitle ] = useState('')
+function DeleteBook({ deleteDialogRef, setShowDeleteDialog, book, onModifyFinished }: Props) {
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if(bookId !== 0 ) {
-      bookService.getBookById(bookId).then((response) => {
-        setTitle(response.data.Title)
-      }).catch(error => alert(error))
-    }
-
-  }, [ ])
-
   const deleteBook = () => {
-    bookService.deleteBook(bookId).then(() => {
-      navigate('./Books')
+    bookService.deleteBook(book.Id).then(() => {
+      navigate('/')
       setShowDeleteDialog(false)
-      window.location.reload()
+      onModifyFinished && onModifyFinished()
     }).catch(error => console.error(error))
   }
 
   return(
     <dialog className='delete-dialog' ref={deleteDialogRef}>
-      <h2>Are you sure you want to delete book {title} ?</h2>
+      <h2>Are you sure you want to delete book {book.Title} ?</h2>
       <div className='delete-dialog-bottons'>
         <button className='delete-dialog-botton-close'
           onClick={() => setShowDeleteDialog(false)}

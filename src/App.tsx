@@ -1,13 +1,19 @@
 import { useEffect, useState } from 'react'
 
+import jwtDecode from 'jwt-decode'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import './App.css'
+import BookDetail from './components/bookDetail/BookDetail'
+import BookForm from './components/bookForm/BookForm'
 import Header from './components/header/Header'
+import HomePage from './components/homePage/HomePage'
+import Login from './components/login/Login'
 import Menu from './components/menu/Menu'
 import NavBar from './components/navBar/NavBar'
+import { Jwt, roleKey, UserRole } from './interfaces/Jwt'
 import WhereObject from './interfaces/WhereObject'
-import routes from './route-config'
+import { PrivateRoutes } from './PrivateRoutes'
 import { getToken } from './services/token.service'
 
 function App() {
@@ -15,31 +21,57 @@ function App() {
   const [ searchInput, setSearchInput ] = useState('')
   const [ filters, setFilters ] = useState<WhereObject[]>([])
   const [ sorting, setSorting ] = useState<string[]>([])
+  const [ userRole, setUserRole ] =useState<UserRole | undefined >(undefined)
 
   useEffect(() => {
-    if (getToken()) {
+    const token = getToken()
+    if(token) {
       setIsLogged(true)
+      setUserRole(jwtDecode<Jwt>(token)[roleKey])
     }
-  }, [ searchInput, filters ])
+  }, [ ])
 
   return (
     <BrowserRouter>
       <Header setSorting={setSorting} setSearchInput={setSearchInput} setFilters={setFilters} isLogged={isLogged} />
       <div className='main-layout'>
-        <NavBar setIsLogged={setIsLogged}  isLogged={isLogged}/>
+        <NavBar userRole = {userRole} setIsLogged={setIsLogged}  isLogged={isLogged}/>
         <div className='container'>
           <Routes>
-            {routes.map(route =>
-              <Route
-                key={route.path}
-                path={route.path}
-                element={<route.component closeEditModal={() => {null}} filters={filters} sorting={sorting} searchInput={searchInput} setIsLogged={setIsLogged} />}
+            <Route element={<PrivateRoutes/>}>
+              <Route path='/createBook' element={<BookForm
+                closeEditModal={() => {null}}
+                onModifyFinished={() => {null}}
+              />}
               />
-            )}
+              <Route path='/bookDetail/:bookId' element={<BookDetail
+                userRole = {userRole}
+              />}
+              />
+            </Route>
+            <Route path='/login' element={<Login
+              setUserRole = {setUserRole}
+              setIsLogged={setIsLogged}
+            />}
+            />
+            <Route path='/' element={<HomePage
+              userRole = {userRole}
+              filters={filters}
+              sorting={sorting}
+              searchInput={searchInput}
+            />}
+            />
+            <Route path='*' element={<HomePage
+              userRole = {userRole}
+              filters={filters}
+              sorting={sorting}
+              searchInput={searchInput}
+            />}
+            />
           </Routes>
         </div>
       </div>
-      <Menu setIsLogged={setIsLogged} isLogged={isLogged} />
+      <Menu userRole = {userRole} setIsLogged={setIsLogged} isLogged={isLogged} />
     </BrowserRouter>
   )
 }
