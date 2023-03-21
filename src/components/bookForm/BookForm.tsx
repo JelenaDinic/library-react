@@ -1,4 +1,3 @@
-
 import { ChangeEvent, useEffect, useState } from 'react'
 
 import { MdAddCircleOutline as AddIcon } from 'react-icons/md'
@@ -19,9 +18,11 @@ const initialUpdatedBook: SingleBookRequest = { Id: 0, Title: '', ISBN: '', Quan
 
 interface Props {
   bookId?: number
+  closeEditModal: () => void;
+  onModifyFinished?: () => void
 }
 
-function BookForm({ bookId } : Props) {
+function BookForm({ bookId, closeEditModal, onModifyFinished } : Props) {
   const [ authorList, setAuthorList ] = useState<AuthorResponse[]>([])
   const [ selectedAuthors, setSelectedAuthors ] = useState<AuthorResponse[]>([])
   const [ isAuthorsChanged, setIsAuthorsChanged ] = useState(false)
@@ -35,40 +36,54 @@ function BookForm({ bookId } : Props) {
   const [ updatedBook, setUpdatedBook ] = useState<SingleBookRequest>(initialUpdatedBook)
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (bookId) {
-      bookService.getBookById(bookId).then((response) => {
-        setUpdatedBook({
-          Id: bookId,
-          Title: response.data?.Title,
-          ISBN: response.data?.ISBN,
-          Quantity: response.data?.Quantity,
-          Description: response.data?.Description,
-          Cover: response.data.Cover,
-          PublishDate: response.data?.PublishDate?.toString(),
-          AuthorIds: response.data.Authors?.map((author) => author.Id)
-        })
-        setBook({
-          Title: response.data?.Title,
-          ISBN: response.data?.ISBN,
-          Quantity: response.data?.Quantity,
-          Description: response.data?.Description,
-          PublishDate: response.data?.PublishDate?.toString(),
-          AuthorsIds: response.data.Authors?.map((author) => author.Id)
-        })
-        const selectedAuthors : AuthorResponse[] = []
-        response.data.Authors.forEach(author =>
-          selectedAuthors.push({
-            Id: author.Id,
-            FirstName: author.Firstname,
-            LastName: author.Lastname
-          }))
-        setSelectedAuthors(selectedAuthors)
-        if(response.data.Cover) {
-          setCover('data:image/png;base64,' + response.data.Cover)
-        }
-      }).catch(error => alert(error))
+  const convertBase64ToBlob = (base64Image: string): Blob => {
+    const parts = base64Image.split(';base64,')
+    const imageType = parts[0].split(':')[1]
+    const decodedData = window.atob(parts[1])
+    const uInt8Array = new Uint8Array(decodedData.length)
+    for (let i = 0; i < decodedData.length; ++i) {
+      uInt8Array[i] = decodedData.charCodeAt(i)
     }
+    return new Blob([ uInt8Array ], { type: imageType })
+  }
+
+  const mapBook = (bookId : number) => {
+    bookService.getBookById(bookId).then((response) => {
+      setUpdatedBook({
+        Id: bookId,
+        Title: response.data?.Title,
+        ISBN: response.data?.ISBN,
+        Quantity: response.data?.Quantity,
+        Description: response.data?.Description,
+        Cover: response.data.Cover,
+        PublishDate: response.data?.PublishDate?.toString(),
+        AuthorIds: response.data.Authors?.map((author) => author.Id)
+      })
+      setBook({
+        Title: response.data?.Title,
+        ISBN: response.data?.ISBN,
+        Quantity: response.data?.Quantity,
+        Description: response.data?.Description,
+        PublishDate: response.data?.PublishDate?.toString(),
+        AuthorsIds: response.data.Authors?.map((author) => author.Id)
+      })
+      const selectedAuthors : AuthorResponse[] = []
+      response.data.Authors.forEach(author =>
+        selectedAuthors.push({
+          Id: author.Id,
+          FirstName: author.Firstname,
+          LastName: author.Lastname
+        }))
+      setSelectedAuthors(selectedAuthors)
+      if(response.data.Cover) {
+        setCover('data:image/png;base64,' + response.data.Cover)
+        setRequestCover(convertBase64ToBlob('data:image/png;base64,' + response.data.Cover))
+      }
+    }).catch(error => alert(error))
+  }
+
+  useEffect(() => {
+    bookId && mapBook(bookId)
     fetchAuthors()
   }, [ isAuthorsChanged ])
 
@@ -103,7 +118,8 @@ function BookForm({ bookId } : Props) {
     if(validateInput()) {
       bookService.updateBook(prepareUpdateFormData())
         .then(() => {
-          navigate('/Books')
+          closeEditModal()
+          onModifyFinished && onModifyFinished()
         })
         .catch(error => {console.error(error)})
     }
@@ -113,7 +129,8 @@ function BookForm({ bookId } : Props) {
     if(validateInput()) {
       bookService.createBook(prepareFormData())
         .then(() => {
-          navigate('/Books')
+          navigate('/')
+          onModifyFinished && onModifyFinished()
         })
         .catch(error => {console.error(error)})
     }

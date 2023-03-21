@@ -1,7 +1,6 @@
 import Author from './Author';
 
 export default interface SingleBookResponse {
-    data: any;
     Id : number;
     Title: string;
     Description: string;

@@ -1,7 +1,7 @@
 import { UserRole } from '../interfaces/Jwt'
 
-export const isUserAdmin = (role: UserRole) => role === UserRole.Admin
+export const isAdmin = (role: UserRole) => role === UserRole.Admin
 
-export const isUserLibrarian = (role: UserRole) => role === UserRole.Librarian
+export const isLibrarian = (role: UserRole) => role === UserRole.Librarian
 
-export const isUserRegularUser = (role: UserRole) => role === UserRole.User
+export const isUser = (role: UserRole) => role === UserRole.User

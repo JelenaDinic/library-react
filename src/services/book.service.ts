@@ -22,12 +22,14 @@ const paramsToUrl = (booksRequest: BooksRequest) => {
 }
 
 const createBook = (formData: FormData)  => baseAxios.post('/Books', formData)
+const deleteBook = (bookId: number)  => baseAxios.delete('/Books/' + bookId.toString())
 const updateBook = (formData: FormData)  => baseAxios.put('/Books', formData)
 const getBooksPaged = (booksRequest : BooksRequest) : Promise<AxiosResponse<BookResponse>>  => baseAxios.get<BookResponse>('/Books/paged' + paramsToUrl(booksRequest))
 const getBookById = ( bookId: number) => baseAxios.get<SingleBookResponse>('/Books/' + bookId.toString())
 
 export default {
   createBook,
+  deleteBook,
   updateBook,
   getBooksPaged,
   getBookById

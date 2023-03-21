@@ -1,0 +1,4 @@
+.delete-dialog-bottons {
+    display: flex;
+    flex-direction: row-reverse;
+}
