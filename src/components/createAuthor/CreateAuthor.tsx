@@ -49,8 +49,18 @@ function CreateAuthor(props: Props) {
         </div>
         {errorMessage && <label className='error-message'>{errorMessage}</label>}
         <div className='author-btns'>
-          <button onClick={createAuthor}>Create </button>
-          <button className= 'cancel-btn' onClick={props.closeModal}>Cancel </button>
+          <button onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            e.stopPropagation()
+            createAuthor()
+          }}
+          >Create
+          </button>
+          <button className= 'cancel-btn' onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            e.stopPropagation()
+            props.closeModal()
+          }}
+          >Cancel
+          </button>
         </div>
       </div>
 

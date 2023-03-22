@@ -21,7 +21,12 @@
 .section {
     display: flex;
     flex-direction: column;
-    margin-bottom: 10%;
+    margin-bottom: 5%;
+}
+
+
+label {
+    font-size: 20px;
 }
 
 .form-input {
@@ -30,7 +35,7 @@
     border: none;
     border-bottom: 1px solid #fce4db;
     color: #fce4db;
-    font-size: large;
+    font-size: 20px;
 }
 
 .select {

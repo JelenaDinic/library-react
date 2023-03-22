@@ -1,7 +1,5 @@
 import { RefObject } from 'react'
 
-import { useNavigate } from 'react-router-dom'
-
 import BookItem from '../../interfaces/BookItem'
 import SingleBookResponse from '../../interfaces/SingleBookResponse'
 import bookService from '../../services/book.service'
@@ -16,27 +14,39 @@ interface Props {
 }
 
 function DeleteBook({ deleteDialogRef, setShowDeleteDialog, book, onModifyFinished }: Props) {
-  const navigate = useNavigate()
 
   const deleteBook = () => {
     bookService.deleteBook(book.Id).then(() => {
       setShowDeleteDialog(false)
       onModifyFinished && onModifyFinished()
-      navigate('/')
     }).catch(error => console.error(error))
   }
 
   return(
-    <dialog className='delete-dialog' ref={deleteDialogRef}>
-      <h2>Are you sure you want to delete book {book.Title} ?</h2>
-      <div className='delete-dialog-bottons'>
-        <button className='delete-dialog-botton-close'
-          onClick={() => setShowDeleteDialog(false)}
-        >Close
-        </button>
-        <button className='delete-dialog-botton-confirm' onClick={deleteBook}>Confirm</button>
-      </div>
-    </dialog>
+    <div onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      e.stopPropagation()
+    }}
+    >
+      <dialog className='delete-dialog' ref={deleteDialogRef}>
+        <h2>Are you sure you want to delete book {book.Title} ?</h2>
+        <div className='delete-dialog-bottons'>
+          <button className='delete-dialog-botton-close'
+            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+              e.stopPropagation()
+              setShowDeleteDialog(false)
+            }}
+          >Close
+          </button>
+          <button className='delete-dialog-botton-confirm' onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            e.stopPropagation()
+            deleteBook()
+          }}
+          >Confirm
+          </button>
+        </div>
+      </dialog>
+    </div>
+
   )
 }
 

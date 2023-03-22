@@ -29,7 +29,7 @@ function App() {
       setIsLogged(true)
       setUserRole(jwtDecode<Jwt>(token)[roleKey])
     }
-  }, [ ])
+  }, [])
 
   return (
     <BrowserRouter>
@@ -59,6 +59,7 @@ function App() {
               filters={filters}
               sorting={sorting}
               searchInput={searchInput}
+              isLogged={isLogged}
             />}
             />
             <Route path='*' element={<HomePage
@@ -66,6 +67,7 @@ function App() {
               filters={filters}
               sorting={sorting}
               searchInput={searchInput}
+              isLogged={isLogged}
             />}
             />
           </Routes>

@@ -12,3 +12,38 @@
     text-transform: uppercase;
     color: #e58f23;
 }
+
+.carousel-root {
+    height: 200px;
+    width: 350px;
+    align-self: center;
+}
+
+.main-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 700px;
+    width:100%
+}
+
+.most-rented {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+}
+
+.carousel-div {
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+}
+
+.carousel-title{
+    color: antiquewhite;
+}
+
+.spinner {
+    margin-left: 50%;
+}

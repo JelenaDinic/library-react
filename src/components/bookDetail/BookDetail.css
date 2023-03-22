@@ -1,0 +1,58 @@
+.detail-cover-section {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+    align-items: center;
+}
+
+.available {
+    background-color: green;
+    height: 40px;
+    width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.not-available {
+    background-color: #D2042D;
+    height: 40px;
+    width: 170px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.history-table {
+    width: 80%;
+    overflow: hidden;
+    text-align: center;
+}
+
+.history-headers {
+    text-align: center;
+}
+
+.cell-data button {
+    margin: auto;
+}
+
+tr {
+    height: 50px;
+}
+
+tr:hover {
+    background-color: #f1b656;
+    
+}
+
+.headers:hover {
+    background-color: unset;
+}
+
+.description-lable {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-style: italic;
+    word-wrap: break-word;
+    max-width: 700px;
+}

@@ -8,6 +8,7 @@
     align-items: center;
     background-color: #849d9b;
     color: #fce4db;
+    cursor: pointer;
 }
 
 .card-cover {

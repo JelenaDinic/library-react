@@ -1,7 +1,7 @@
 import './Menu.css'
 
 import { BiLogOut as LogoutIcon } from 'react-icons/bi'
-import { GiBookshelf as BooksIcon } from 'react-icons/gi'
+import { ImHome as HomeIcon } from 'react-icons/im'
 import { MdAddCircleOutline as AddIcon } from 'react-icons/md'
 import { NavLink } from 'react-router-dom'
 
@@ -24,7 +24,7 @@ function Menu( { setIsLogged, isLogged, userRole }  : Props) {
   return (
     <div className='menu'>
       <div className='menu-content'>
-        <NavLink to="/" ><BooksIcon size={25} color="#fce4db"/></NavLink>
+        <NavLink to="/" ><HomeIcon size={25} color="#fce4db"/></NavLink>
 
         {isLogged &&
         <> {(userRole && (isAdmin(userRole) || isLibrarian(userRole))) &&

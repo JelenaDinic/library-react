@@ -1,10 +1,10 @@
-import { ChangeEvent, useMemo, useState } from 'react'
+import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import './Header.css'
 
 import debounce from 'lodash.debounce'
 import { AiOutlineSortDescending as SortIcon } from 'react-icons/ai'
 import { BiFilterAlt as FilterIcon, BiSearchAlt as SearchIcon } from 'react-icons/bi'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import WhereObject from '../../interfaces/WhereObject'
 import Filter from '../filter/Filter'
@@ -21,10 +21,15 @@ function Header({ isLogged, setSearchInput, setFilters, setSorting } : Props) {
   const [ showFilterModal, setShowFilterModal ] = useState(false)
   const [ showSortModal, setShowSortModal ] = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
 
   const handleSearchOnChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     setSearchInput(target.value)
   }
+
+  useEffect(() => {
+    console.log(location.pathname)
+  }, [])
 
   const debouncedChangeHandler = useMemo(
     () => debounce(handleSearchOnChange, 500),
@@ -36,6 +41,7 @@ function Header({ isLogged, setSearchInput, setFilters, setSorting } : Props) {
       {
         isLogged ?
 
+          location.pathname === '/' &&
           <div className='header-content'>
             <SearchIcon className = "header-icon" color='#fce4db' size={30}/>
             <input className = "search" placeholder="Search books"
@@ -46,9 +52,9 @@ function Header({ isLogged, setSearchInput, setFilters, setSorting } : Props) {
             <SortIcon onClick={() => setShowSortModal((show) => !show)} className = "header-icon" color='#fce4db' size={30}/>
             { showSortModal && <Sorting setSorting={setSorting} closeSortModal={() => setShowSortModal(false)}/>}
           </div> :
+          location.pathname !== '/login' &&
           <div className='sign-buttons'>
             <button name = "sign-in" onClick={ () => navigate('/login')}>Sign In</button>
-            <button name = "sign-up">Sign Up</button>
           </div>
       }
     </div>

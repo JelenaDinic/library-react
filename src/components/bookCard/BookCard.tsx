@@ -1,6 +1,6 @@
-import { createRef, useEffect, useState } from 'react'
+import { createRef, LegacyRef, useEffect, useState } from 'react'
 
-import { BiDetail as DetailIcon, BiEditAlt as EditIcon } from 'react-icons/bi'
+import { BiEditAlt as EditIcon } from 'react-icons/bi'
 import { BsBookmarkCheck as RentIcon } from 'react-icons/bs'
 import { RiDeleteBin6Line as DeleteIcon } from 'react-icons/ri'
 import { useNavigate } from 'react-router-dom'
@@ -17,14 +17,16 @@ import './BookCard.css'
 interface Props {
   book: BookItem,
   userRole?: UserRole
+  isLogged: boolean
   onModifyFinished: () => void
 }
 
-function BookCard({ book, userRole, onModifyFinished }: Props) {
+function BookCard({ book, userRole, isLogged, onModifyFinished }: Props) {
   const [ showEditModal, setShowEditModal ] = useState(false)
   const [ showDeleteDialog, setShowDeleteDialog ] = useState(false)
   const deleteDialogRef = createRef<HTMLDialogElement>()
   const navigate = useNavigate()
+  const bookCard = createRef<LegacyRef<HTMLDivElement> | undefined>()
 
   useEffect(() => {
     showDeleteDialog ?
@@ -41,36 +43,49 @@ function BookCard({ book, userRole, onModifyFinished }: Props) {
   }
 
   return (
-    <div className="card">
+    <div
+      className="card"
+      onClick={() => {
+        navigate('/bookDetail/' + book.Id.toString())
+      }}
+    >
       <img className= "card-cover" src={book.Cover ? 'data:image/png;base64,' + book.Cover : noCover}/>
       <h2 className='card-title'>{book.Title} </h2>
       <p>
         {book.Authors.map((author) => `${author.FirstName} ${author.LastName}`).join(', ')}
       </p>
-      <label className="isbn-label" >ISBN : {book.Isbn} </label>
       <div className='card-buttons'>
-        <button className='detail-button' onClick={() => navigate('/bookDetail/' + book.Id.toString())}>
-          <DetailIcon size={30} />
-        </button>
         {
-          userRole && (isAdmin(userRole) || isLibrarian(userRole)) ?
+          userRole && isLogged && (isAdmin(userRole) || isLibrarian(userRole)) ?
             <>
-              <button className='detail-button'>
-                <EditIcon onClick={() => setShowEditModal((show) => !show)} size={30}/>
+              <button className='detail-button' onClick={(e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                e.stopPropagation()
+                setShowEditModal((show) => !show)
+              }}
+              >
+                <EditIcon size={30}/>
               </button>
               { showEditModal &&
-              <EditBook onModifyFinished = {onModifyFinished} closeEditModal={() => setShowEditModal(false)} bookId={book.Id}/>}
-              <button className='delete-button'>
-                <DeleteIcon onClick={() => setShowDeleteDialog(true)} size={30} />
+              <EditBook updateBookOnChange= {()=> {null}} onModifyFinished = {onModifyFinished} closeEditModal={() => setShowEditModal(false)} bookId={book.Id}/>}
+              <button className='delete-button' onClick={(e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                e.stopPropagation()
+                setShowDeleteDialog(true)
+              }}
+              >
+                <DeleteIcon  size={30}/>
               </button>
               <DeleteBook onModifyFinished = {onModifyFinished} book = {book} deleteDialogRef={deleteDialogRef}
                 setShowDeleteDialog={setShowDeleteDialog}
               />
             </>
             :
-            <button className='detail-button' onClick={rentBook} ><RentIcon size={30}/></button>
+            isLogged &&
+              <button className='detail-button' onClick={(e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                e.stopPropagation()
+                rentBook()}}
+              ><RentIcon size={30}/>
+              </button>
         }
-
       </div>
     </div>
   )
