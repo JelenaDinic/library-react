@@ -3,6 +3,7 @@ import { createRef, useEffect, useState } from 'react'
 import { BiEditAlt as EditIcon } from 'react-icons/bi'
 import { BsBookmarkCheck as RentIcon } from 'react-icons/bs'
 import { RiDeleteBin6Line as DeleteIcon } from 'react-icons/ri'
+import { ThreeDots } from 'react-loader-spinner'
 import { useParams } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -152,7 +153,15 @@ function BookDetail({ userRole }: Props) {
             }
 
           </div>
-        </> : <label> There is no book with id = {params.bookId}</label>
+        </> : <ThreeDots
+          height="80"
+          width="80"
+          radius="9"
+          color="#e58f23"
+          ariaLabel="three-dots-loading"
+          wrapperStyle={{}}
+          visible={true}
+        />
       }
       {
         bookHistory.length > 0 &&

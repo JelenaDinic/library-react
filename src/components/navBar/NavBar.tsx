@@ -1,7 +1,6 @@
 import './NavBar.css'
 
 import { BiLogOut as LogoutIcon } from 'react-icons/bi'
-import { GiBookshelf as BooksIcon } from 'react-icons/gi'
 import { ImHome as HomeIcon } from 'react-icons/im'
 import { MdAddCircleOutline as AddIcon } from 'react-icons/md'
 import { NavLink } from 'react-router-dom'
@@ -27,7 +26,6 @@ function NavBar({ setIsLogged, isLogged, userRole }  : Props) {
     <div className='navbar'>
       <div className='navbar-content'>
         <NavLink className = "navbar-icon" to="/" ><HomeIcon className = "icon" size={50} color="#fce4db" /></NavLink>
-        <NavLink className = "navbar-icon" to="/" ><BooksIcon className = "icon" size={50} color="#fce4db" /></NavLink>
         {isLogged &&
         <>
           <NavLink className="navbar-icon-logout"

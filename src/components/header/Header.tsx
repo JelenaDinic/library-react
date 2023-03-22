@@ -48,7 +48,6 @@ function Header({ isLogged, setSearchInput, setFilters, setSorting } : Props) {
           </div> :
           <div className='sign-buttons'>
             <button name = "sign-in" onClick={ () => navigate('/login')}>Sign In</button>
-            <button name = "sign-up">Sign Up</button>
           </div>
       }
     </div>

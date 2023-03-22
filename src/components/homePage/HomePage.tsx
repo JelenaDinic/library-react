@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { AxiosResponse } from 'axios'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { ThreeDots } from 'react-loader-spinner'
 import { Carousel } from 'react-responsive-carousel'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
 
@@ -23,9 +24,10 @@ interface Props {
   filters : WhereObject[]
   sorting: string[]
   userRole?: UserRole
+  isLogged: boolean
 }
 
-function HomePage( { searchInput, filters, sorting, userRole } : Props) {
+function HomePage( { searchInput, filters, sorting, userRole, isLogged } : Props) {
   const [ bookList, setBookList ] = useState<BookItem[]>([])
   const [ pageNumber, setPageNumber ] = useState(1)
   const [ hasMore, setHasMore ] = useState(false)
@@ -40,7 +42,7 @@ function HomePage( { searchInput, filters, sorting, userRole } : Props) {
   }
 
   const fetchMostRentedBooks = () => {
-    rentalService.getTopRentals(10).then((response) =>
+    isLogged && rentalService.getTopRentals(10).then((response) =>
     {
       setMostRentedBooks(response.data)
     }).catch((error) => console.error(error))
@@ -97,26 +99,62 @@ function HomePage( { searchInput, filters, sorting, userRole } : Props) {
 
   return (
     <div className='main-page'>
+      {isLogged &&
       <div className='most-rented'>
         <h1 className='available-title'>TOP 10 MOST RENTED BOOKS</h1>
-        <Carousel className='carousel-root'>
-          {mostRentedBooks.map(book => {
-            // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-            const cover = 'data:image/png;base64,' + book.Cover
-            return <div key={book.Id} className="carousel-div"><h2 className='carousel-title'>{book.Title}</h2><img className="carousel-imgs" src={cover}/> </div>
-          })}
-        </Carousel>
+        {
+          mostRentedBooks.length > 0 ?
+            <Carousel className='carousel-root'>
+              {mostRentedBooks.map(book => {
+                const cover = `data:image/png;base64,${book.Cover ? book.Cover : ''}`
+                return <div key={book.Id} className="carousel-div"><h2 className='carousel-title'>{book.Title}</h2><img className="carousel-imgs" src={cover}/> </div>
+              })}
+            </Carousel>
+            : <ThreeDots
+              height="80"
+              width="80"
+              radius="9"
+              color="#e58f23"
+              ariaLabel="three-dots-loading"
+              wrapperClass='spinner'
+              visible={true}
+            />
+
+        }
+
       </div>
+      }
+
       <div className="home">
         <h1 className='available-title'>Available books</h1>
-        <InfiniteScroll
-          dataLength={bookList.length}
-          next={addNextPage}
-          hasMore={hasMore}
-          loader={<h3 className='loading'>Loading...</h3>}
-          scrollThreshold='80%'
-        ><BookList onModifyFinished={onModifyFinished} userRole={userRole} bookList={bookList} />
-        </InfiniteScroll>
+        {
+          bookList.length > 0 ?
+            <InfiniteScroll
+              dataLength={bookList.length}
+              next={addNextPage}
+              hasMore={hasMore}
+              loader={<ThreeDots
+                height="80"
+                width="80"
+                radius="9"
+                color="#e58f23"
+                ariaLabel="three-dots-loading"
+                wrapperClass='spinner'
+                visible={true}
+              />}
+              scrollThreshold='80%'
+            ><BookList onModifyFinished={onModifyFinished} userRole={userRole} bookList={bookList} />
+            </InfiniteScroll> :
+            <ThreeDots
+              height="80"
+              width="80"
+              radius="9"
+              color="#e58f23"
+              ariaLabel="three-dots-loading"
+              visible={true}
+            />
+        }
+
       </div>
     </div>
   )
