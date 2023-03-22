@@ -17,10 +17,11 @@ import './BookCard.css'
 interface Props {
   book: BookItem,
   userRole?: UserRole
+  isLogged: boolean
   onModifyFinished: () => void
 }
 
-function BookCard({ book, userRole, onModifyFinished }: Props) {
+function BookCard({ book, userRole, isLogged, onModifyFinished }: Props) {
   const [ showEditModal, setShowEditModal ] = useState(false)
   const [ showDeleteDialog, setShowDeleteDialog ] = useState(false)
   const deleteDialogRef = createRef<HTMLDialogElement>()
@@ -47,7 +48,6 @@ function BookCard({ book, userRole, onModifyFinished }: Props) {
       <p>
         {book.Authors.map((author) => `${author.FirstName} ${author.LastName}`).join(', ')}
       </p>
-      <label className="isbn-label" >ISBN : {book.Isbn} </label>
       <div className='card-buttons'>
         {
           userRole && (isAdmin(userRole) || isLibrarian(userRole)) ?
@@ -73,9 +73,13 @@ function BookCard({ book, userRole, onModifyFinished }: Props) {
               />
             </>
             :
-            <button className='detail-button' onClick={rentBook} ><RentIcon size={30}/></button>
+            isLogged &&
+              <button className='detail-button' onClick={(e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                e.stopPropagation()
+                rentBook()}}
+              ><RentIcon size={30}/>
+              </button>
         }
-
       </div>
     </div>
   )

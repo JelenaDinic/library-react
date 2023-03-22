@@ -14,6 +14,7 @@ import { UserRole } from '../../interfaces/Jwt'
 import WhereObject from '../../interfaces/WhereObject'
 import bookService from '../../services/book.service'
 import rentalService from '../../services/rental.service'
+import { getToken } from '../../services/token.service'
 import BookList from '../bookList/BookList'
 import './HomePage.css'
 
@@ -42,7 +43,7 @@ function HomePage( { searchInput, filters, sorting, userRole, isLogged } : Props
   }
 
   const fetchMostRentedBooks = () => {
-    isLogged && rentalService.getTopRentals(10).then((response) =>
+    getToken() && rentalService.getTopRentals(10).then((response) =>
     {
       setMostRentedBooks(response.data)
     }).catch((error) => console.error(error))
@@ -99,7 +100,7 @@ function HomePage( { searchInput, filters, sorting, userRole, isLogged } : Props
 
   return (
     <div className='main-page'>
-      {isLogged &&
+      {getToken() &&
       <div className='most-rented'>
         <h1 className='available-title'>TOP 10 MOST RENTED BOOKS</h1>
         {
@@ -143,7 +144,7 @@ function HomePage( { searchInput, filters, sorting, userRole, isLogged } : Props
                 visible={true}
               />}
               scrollThreshold='80%'
-            ><BookList onModifyFinished={onModifyFinished} userRole={userRole} bookList={bookList} />
+            ><BookList isLogged={isLogged} onModifyFinished={onModifyFinished} userRole={userRole} bookList={bookList} />
             </InfiniteScroll> :
             <ThreeDots
               height="80"

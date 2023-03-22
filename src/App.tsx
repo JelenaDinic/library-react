@@ -29,7 +29,7 @@ function App() {
       setIsLogged(true)
       setUserRole(jwtDecode<Jwt>(token)[roleKey])
     }
-  }, [ ])
+  }, [])
 
   return (
     <BrowserRouter>
