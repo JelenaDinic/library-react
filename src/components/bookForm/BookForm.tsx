@@ -21,10 +21,11 @@ const initialUpdatedBook: SingleBookRequest = { Id: 0, Title: '', ISBN: '', Quan
 interface Props {
   bookId?: number
   closeEditModal: () => void;
-  onModifyFinished?: () => void
+  onModifyFinished?: () => void;
+  updateBookOnChange?: () => void
 }
 
-function BookForm({ bookId, closeEditModal, onModifyFinished } : Props) {
+function BookForm({ bookId, closeEditModal, onModifyFinished, updateBookOnChange } : Props) {
   const [ authorList, setAuthorList ] = useState<AuthorResponse[]>([])
   const [ selectedAuthors, setSelectedAuthors ] = useState<AuthorResponse[]>([])
   const [ isAuthorsChanged, setIsAuthorsChanged ] = useState(false)
@@ -122,6 +123,7 @@ function BookForm({ bookId, closeEditModal, onModifyFinished } : Props) {
         .then(() => {
           closeEditModal()
           onModifyFinished && onModifyFinished()
+          updateBookOnChange && updateBookOnChange()
         })
         .catch(error => {console.error(error)})
     }
@@ -218,7 +220,7 @@ function BookForm({ bookId, closeEditModal, onModifyFinished } : Props) {
           </div>
           <div  className='section'>
             <label className="desc-label" >Description</label>
-            <textarea className="form-input" rows={3} value={book.Description}
+            <textarea className="form-input" rows={3} value={book.Description ? book.Description : ''}
               onChange={(e) => {
                 setBook(prevState => ({ ...prevState, Description: e.target.value }))
                 setUpdatedBook(prevState => ({ ...prevState, Description: e.target.value }))
@@ -273,7 +275,12 @@ function BookForm({ bookId, closeEditModal, onModifyFinished } : Props) {
         </div>
 
       </div>
-      <button onClick={handleBookFormSubmit}>{bookId ? 'Update' : 'Create'}</button>
+      <button onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.stopPropagation()
+        handleBookFormSubmit()
+      }}
+      >{bookId ? 'Update' : 'Create'}
+      </button>
     </div>
   )
 }

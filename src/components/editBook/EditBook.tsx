@@ -4,18 +4,23 @@ import './EditBook.css';
 
 interface Props {
   bookId: number
-  closeEditModal: () => void;
+  closeEditModal: () => void
   onModifyFinished?: () => void
+  updateBookOnChange: () => void
 }
 
-function EditBook( { bookId, closeEditModal, onModifyFinished } : Props) {
+function EditBook( { bookId, closeEditModal, onModifyFinished, updateBookOnChange } : Props) {
 
   return(
     <div className="modal">
-      <div className="overlay" onClick={closeEditModal}/>
+      <div className="overlay" onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.stopPropagation()
+        closeEditModal()
+      }}
+      />
       <div className="content">
         <h2>Edit book</h2>
-        <BookForm onModifyFinished = {onModifyFinished} bookId={bookId} closeEditModal={closeEditModal}/>
+        <BookForm updateBookOnChange={updateBookOnChange} onModifyFinished = {onModifyFinished} bookId={bookId} closeEditModal={closeEditModal}/>
       </div>
     </div>
   )

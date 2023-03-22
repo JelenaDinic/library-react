@@ -32,6 +32,7 @@ function BookDetail({ userRole }: Props) {
   const [ bookHistory, setBookHistory ] = useState<BookHistoryResponse[]>([])
   const deleteDialogRef = createRef<HTMLDialogElement>()
   const params= useParams()
+  const [ onBookUpdate, setOnBookUpdate ] = useState(false)
 
   useEffect(() => {
     fetchBookHistory()
@@ -46,7 +47,11 @@ function BookDetail({ userRole }: Props) {
     showDeleteDialog ?
       deleteDialogRef.current?.showModal() :
       deleteDialogRef.current?.close()
-  }, [ showDeleteDialog ])
+  }, [ showDeleteDialog, onBookUpdate ])
+
+  const updateBookOnChange = () => {
+    setOnBookUpdate(!onBookUpdate)
+  }
 
   const fetchBookHistory = () => {
     params.bookId && rentalService.getBookHistory(parseInt(params.bookId)).then(response => {
@@ -59,6 +64,7 @@ function BookDetail({ userRole }: Props) {
     rentalService.rentBook(parseInt(params.bookId)).then(() => {
       toast.success('Successfully rented')
       fetchBookHistory()
+      updateBookOnChange()
     }).catch((error) => {
       toast.error('An error occured.')
     })
@@ -68,6 +74,7 @@ function BookDetail({ userRole }: Props) {
     params.bookId &&
     rentalService.returnBook(rentId).then(() => {
       toast.success('Successfully returned')
+      updateBookOnChange()
       setBookHistory((previousState) =>  [ ...previousState.map(element => element.Id === rentId
         ? { ...element, IsReturned: true }
         : element
@@ -98,15 +105,14 @@ function BookDetail({ userRole }: Props) {
             </div>
             <div className='forms-sections'>
               <div  className='section'>
-                <label className="name-label" >Title</label>
-                <label>{book.Title}</label>
+                <h1>{book.Title}</h1>
+              </div>
+              <div  className='section'>
+                <label className='description-lable'>{book.Description ? book.Description : ''}</label>
               </div>
               <div className='section'>
                 <label className="isbn-label" >ISBN</label>
                 <label>{book.ISBN}</label>
-              </div>
-              <div  className='section'>
-                <label>{book.Description}</label>
               </div>
               <div  className='section' >
 
@@ -132,7 +138,7 @@ function BookDetail({ userRole }: Props) {
                     <EditIcon onClick={() => setShowEditModal((show) => !show)} size={30}/>
                   </button>
                   { showEditModal &&
-                    <EditBook closeEditModal={() => setShowEditModal(false)} bookId={book.Id}/>}
+                    <EditBook updateBookOnChange = {updateBookOnChange} closeEditModal={() => setShowEditModal(false)} bookId={book.Id}/>}
                   <button className='delete-button'>
                     <DeleteIcon onClick={() => setShowDeleteDialog(true)} size={30} />
                   </button>
@@ -151,6 +157,7 @@ function BookDetail({ userRole }: Props) {
       {
         bookHistory.length > 0 &&
         <>
+          <h2>RENT HISTORY</h2>
           <table className='history-table'>
             <thead className='history-headers'>
               <tr className='headers'>
@@ -165,7 +172,7 @@ function BookDetail({ userRole }: Props) {
                   return (
                     <tr key={bookRentHistory.Id}>
                       <td className='cell-data'>
-                        {bookRentHistory.RentDate}
+                        {bookRentHistory.RentDate ? new Intl.DateTimeFormat('en-CA').format(new Date(bookRentHistory.RentDate)) : '/' }
                       </td>
                       <td className='cell-data'>
                         {bookRentHistory.User.Email}

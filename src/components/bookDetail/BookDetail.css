@@ -17,7 +17,7 @@
 .not-available {
     background-color: #D2042D;
     height: 40px;
-    width: 150px;
+    width: 170px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -48,4 +48,11 @@ tr:hover {
 
 .headers:hover {
     background-color: unset;
+}
+
+.description-lable {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-style: italic;
+    word-wrap: break-word;
+    max-width: 300px;
 }
