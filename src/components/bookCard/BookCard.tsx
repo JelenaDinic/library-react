@@ -1,4 +1,4 @@
-import { createRef, useEffect, useState } from 'react'
+import { createRef, LegacyRef, useEffect, useState } from 'react'
 
 import { BiEditAlt as EditIcon } from 'react-icons/bi'
 import { BsBookmarkCheck as RentIcon } from 'react-icons/bs'
@@ -26,6 +26,7 @@ function BookCard({ book, userRole, isLogged, onModifyFinished }: Props) {
   const [ showDeleteDialog, setShowDeleteDialog ] = useState(false)
   const deleteDialogRef = createRef<HTMLDialogElement>()
   const navigate = useNavigate()
+  const bookCard = createRef<LegacyRef<HTMLDivElement> | undefined>()
 
   useEffect(() => {
     showDeleteDialog ?
@@ -42,7 +43,12 @@ function BookCard({ book, userRole, isLogged, onModifyFinished }: Props) {
   }
 
   return (
-    <div className="card" onClick={() => navigate('/bookDetail/' + book.Id.toString())}>
+    <div
+      className="card"
+      onClick={() => {
+        navigate('/bookDetail/' + book.Id.toString())
+      }}
+    >
       <img className= "card-cover" src={book.Cover ? 'data:image/png;base64,' + book.Cover : noCover}/>
       <h2 className='card-title'>{book.Title} </h2>
       <p>
@@ -50,7 +56,7 @@ function BookCard({ book, userRole, isLogged, onModifyFinished }: Props) {
       </p>
       <div className='card-buttons'>
         {
-          userRole && (isAdmin(userRole) || isLibrarian(userRole)) ?
+          userRole && isLogged && (isAdmin(userRole) || isLibrarian(userRole)) ?
             <>
               <button className='detail-button' onClick={(e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                 e.stopPropagation()
@@ -62,8 +68,8 @@ function BookCard({ book, userRole, isLogged, onModifyFinished }: Props) {
               { showEditModal &&
               <EditBook updateBookOnChange= {()=> {null}} onModifyFinished = {onModifyFinished} closeEditModal={() => setShowEditModal(false)} bookId={book.Id}/>}
               <button className='delete-button' onClick={(e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-                setShowDeleteDialog(true)
                 e.stopPropagation()
+                setShowDeleteDialog(true)
               }}
               >
                 <DeleteIcon  size={30}/>

@@ -23,24 +23,30 @@ function DeleteBook({ deleteDialogRef, setShowDeleteDialog, book, onModifyFinish
   }
 
   return(
-    <dialog className='delete-dialog' ref={deleteDialogRef}>
-      <h2>Are you sure you want to delete book {book.Title} ?</h2>
-      <div className='delete-dialog-bottons'>
-        <button className='delete-dialog-botton-close'
-          onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    <div onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      e.stopPropagation()
+    }}
+    >
+      <dialog className='delete-dialog' ref={deleteDialogRef}>
+        <h2>Are you sure you want to delete book {book.Title} ?</h2>
+        <div className='delete-dialog-bottons'>
+          <button className='delete-dialog-botton-close'
+            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+              e.stopPropagation()
+              setShowDeleteDialog(false)
+            }}
+          >Close
+          </button>
+          <button className='delete-dialog-botton-confirm' onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
             e.stopPropagation()
-            setShowDeleteDialog(false)
+            deleteBook()
           }}
-        >Close
-        </button>
-        <button className='delete-dialog-botton-confirm' onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-          e.stopPropagation()
-          deleteBook()
-        }}
-        >Confirm
-        </button>
-      </div>
-    </dialog>
+          >Confirm
+          </button>
+        </div>
+      </dialog>
+    </div>
+
   )
 }
 

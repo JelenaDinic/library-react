@@ -244,7 +244,10 @@ function BookForm({ bookId, closeEditModal, onModifyFinished, updateBookOnChange
                 onChange={handleSelectedAuthorsChange}
               />
               <button className='add-btn'
-                onClick={() => setShowModal((show) => !show)}
+                onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                  e.stopPropagation()
+                  setShowModal((show) => !show)
+                }}
               >
                 <AddIcon className = "icon" size={40} color="#fce4db" />
               </button>

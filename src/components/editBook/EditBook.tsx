@@ -1,6 +1,6 @@
-import BookForm from '../bookForm/BookForm';
+import BookForm from '../bookForm/BookForm'
 
-import './EditBook.css';
+import './EditBook.css'
 
 interface Props {
   bookId: number
@@ -18,9 +18,18 @@ function EditBook( { bookId, closeEditModal, onModifyFinished, updateBookOnChang
         closeEditModal()
       }}
       />
-      <div className="content">
+      <div className="content"
+        onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+          e.stopPropagation()
+        }}
+      >
         <h2>Edit book</h2>
-        <BookForm updateBookOnChange={updateBookOnChange} onModifyFinished = {onModifyFinished} bookId={bookId} closeEditModal={closeEditModal}/>
+        <BookForm
+          updateBookOnChange={updateBookOnChange}
+          onModifyFinished = {onModifyFinished}
+          bookId={bookId}
+          closeEditModal={closeEditModal}
+        />
       </div>
     </div>
   )

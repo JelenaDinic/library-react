@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { ThreeDots } from 'react-loader-spinner'
 import { Carousel } from 'react-responsive-carousel'
 import 'react-responsive-carousel/lib/styles/carousel.min.css'
+import { useNavigate } from 'react-router-dom'
 
 import BookItem from '../../interfaces/BookItem'
 import BookRentalResponse from '../../interfaces/BookRentalResponse'
@@ -36,6 +37,7 @@ function HomePage( { searchInput, filters, sorting, userRole, isLogged } : Props
   const [ currentFilters, setCurrentFilters ] = useState<WhereObject[]>(filters)
   const [ currentSorts, setCurrentSorts ] = useState<string[]>(sorting)
   const [ mostRentedBooks, setMostRentedBooks ] = useState<BookRentalResponse[]>([])
+  const navigate = useNavigate()
 
 
   const addNextPage = () => {
@@ -108,7 +110,7 @@ function HomePage( { searchInput, filters, sorting, userRole, isLogged } : Props
             <Carousel className='carousel-root'>
               {mostRentedBooks.map(book => {
                 const cover = `data:image/png;base64,${book.Cover ? book.Cover : ''}`
-                return <div key={book.Id} className="carousel-div"><h2 className='carousel-title'>{book.Title}</h2><img className="carousel-imgs" src={cover}/> </div>
+                return <div key={book.Id} onClick={() => navigate('/bookDetail/' + book.Id.toString())} className="carousel-div"><h2 className='carousel-title'>{book.Title}</h2><img className="carousel-imgs" src={cover}/> </div>
               })}
             </Carousel>
             : <ThreeDots
@@ -127,7 +129,7 @@ function HomePage( { searchInput, filters, sorting, userRole, isLogged } : Props
       }
 
       <div className="home">
-        <h1 className='available-title'>Available books</h1>
+        <h1 className='available-title'>All books</h1>
         {
           bookList.length > 0 ?
             <InfiniteScroll
